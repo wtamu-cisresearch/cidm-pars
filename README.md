@@ -58,11 +58,4 @@ SELECT plo.PloNo AS 'sonumber', plo.PloNo AS 'Queried SO (Student Outcome)', ROU
 
 ----------
 
-Suggestions
--------------
-
- - Create authentication for the custom endpoints. Check:
- [WordPress.org - Developer Resources - Authentication](https://developer.wordpress.org/rest-api/using-the-rest-api/authentication/)
- 
- - To be continued ...
  
