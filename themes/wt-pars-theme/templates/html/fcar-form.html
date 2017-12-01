@@ -1,0 +1,202 @@
+<div id="baseModal" class="modal">
+    <div class="modal-content">
+    <div class="modal-header">
+        <span class="close">&times;</span>
+    </div>
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="5">Current Course Selection</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>Year</b></td>
+                        <td><b>Term</b></td>
+                        <td><b>Course</b></td>
+                        <td><b>Section</b></td>
+                    </tr>
+                    <tr>
+                        <td id="_year"></td>
+                        <td id="_term"></td>
+                        <td id="_course"></td>
+                        <td id="_section"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br/>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td id="_coDes"></td>
+                        </tr>
+                </tbody>
+            </table>
+
+            <br/>
+            
+            <form action="javascript:submit();">
+                <div>
+                    <select id="_cloHook" style="width: 100%;" onchange="spanModal(value)">
+                        <option id='defaultOption' selected>- Select a Course Learning Objective -</option>
+                    </select>
+                    <div id="_widgetsHook"></div>
+                </div>
+
+                <br/>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="6">Grade Distribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                                <td><b>A</b></td>
+                                <td><b>B</b></td>
+                                <td><b>C</b></td>
+                                <td><b>D</b></td>
+                                <td><b>F</b></td>
+                                <td><b>X</b></td>
+                        </tr>
+                        <tr>
+                            <td><input id="a" type="text" style="width: 30px;"></td>
+                            <td><input id="b" type="text" style="width: 30px;"></td>
+                            <td><input id="c" type="text" style="width: 30px;"></td>
+                            <td><input id="d" type="text" style="width: 30px;"></td>
+                            <td><input id="f" type="text" style="width: 30px;"></td>
+                            <td><input id="x" type="text" style="width: 30px;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br/>
+
+                <div>
+                    <label>Modifications Made to Course</label>
+                    <textarea id="modifications"></textarea>
+                </div>
+
+                <br/>
+
+                <div>
+                    <label>Reflection</label>
+                    <textarea id="reflection"></textarea>
+                </div>
+
+                <br/>  
+
+                <div>
+                    <label>Student Feedback</label>
+                    <textarea id="feedback"></textarea>
+                </div>
+
+                <br/>   
+
+                <div>
+                    <label>Proposed Actions for Course Imporvement</label>
+                    <textarea id="improvement"></textarea>
+                </div>
+
+                <div>
+                    <input type="file" style="width:100%;" id="file" onchange="fileUpload(value)">
+                </div>
+
+                <button>Submit</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>    
+</div>
+
+<div id="childModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+        </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Course Learning Outcome Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td id="courseDes"></td>
+                        </tr>
+                </tbody>
+            </table>
+
+            <br/>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mapped Student Outcome</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <td id="mappedSo"></td>
+                        </tr>
+                </tbody>
+            </table>
+
+            <br/>
+
+            <form action="javascript:saveMeasure(this.measure.value, this.exemplary.value, this.good.value, this.satisfactory.value, this.poor.value, this.unsatisfactory.value, this.comments.value);">
+                <select style="width:100%;" id="measure">
+                    <option>- Select Measure -</option>
+                    <option>Exam</option>
+                    <option>Rubric</option>
+                    <option >Project</option>
+                    <option>Presentation</option>
+                    <option>Project Assignment</option>
+                    <option>Homework Assignment</option>
+                    <option>Quiz</option>
+                    <option>Other</option>
+                </select>
+
+                <br/>
+
+                <textarea id="comments" placeholder="- Comments - "></textarea>
+
+                <br/>
+
+                <input id="exemplary" type="text" placeholder="- Exemplary -">
+
+                <br/>
+                
+                <input id="good" type="text" placeholder="- Good -">
+
+                <br/>
+                
+                <input id="satisfactory" type="text" placeholder="- Satisfactory -">
+
+                <br/>
+                
+                <input id="poor" type="text" placeholder="- Poor -">
+
+                <br/>
+                
+                <input id="unsatisfactory" type="text" placeholder="- Unsatisfactory -">
+
+                <button style="display:none;" id="delete" type="button">Delete</button>
+
+                <button>Save</button>
+            </form>
+        <div class="modal-footer">
+        </div>      
+    </div>  
+</div>
+
