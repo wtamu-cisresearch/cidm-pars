@@ -14,7 +14,7 @@ Entity Relational Digram
 -------------
 
 
-![Alt text](new-erd.jpeg?raw=true "New ERD")
+![Alt text](erd.jpeg?raw=true "ERD")
 
 
 ----------
