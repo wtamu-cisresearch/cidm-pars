@@ -16,9 +16,10 @@ Entity Relational Digram
 
 ![Alt text](new-erd.jpeg?raw=true "New ERD")
 
-### Queries to populate the new entiteis
+### Queries to populate the new entiteis:
 
 > **Note:** Not fully tested
+
 > **Note:** The queries need to be executed sequentially
 
 ```sql
@@ -38,8 +39,6 @@ Entity Relational Digram
  SELECT pars_student_outcome.so_id, z.clo_id FROM pars_student_outcome, ( SELECT plo.PloDec, Y.clo_id FROM plo, ( SELECT X.CloNo, X.PloNo, X.CloDec, pars_course_learning_outcome.clo_id FROM pars_course_learning_outcome, ( SELECT ploclomap.CloNo, ploclomap.PloNo, clo.CloDec FROM ploclomap, clo WHERE ploclomap.CloNo = clo.CloNo GROUP BY clo.CloNO ) AS X WHERE X.CloDec = pars_course_learning_outcome.description ) AS Y WHERE Y.PloNo = plo.nid11 ) AS z WHERE z.PloDec = pars_student_outcome.description GROUP BY pars_student_outcome.so_id, z.clo_id  
  /*pars_program_educational_objective*/  
  SELECT peo AS CODE, peo_description AS description FROM program_educational_objective GROUP BY peo_description   /*pars_expectation*/  SELECT pars_student_outcome.so_id, pars_program_educational_objective.peo_id FROM pars_student_outcome, pars_program_educational_objective, ( SELECT plo.PloDec, program_education_objective.peo_description FROM plopeomap, plo, program_education_objective WHERE plopeomap.plo = plo.nid11 AND plopeomap.peo = program_education_objective.nid ) AS X WHERE pars_student_outcome.description = X.PloDec AND pars_program_educational_objective.description = X.peo_description GROUP BY pars_student_outcome.so_id, pars_program_educational_objective.peo_id   
- 
- 
 
 ```
 
