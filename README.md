@@ -19,6 +19,7 @@ Entity Relational Digram
 ### Queries to populate the new entiteis
 
 > **Note:** Not fully tested
+> **Note:** The queries need to be executed sequentially
 
 ```sql
  /*pars_class*/  
