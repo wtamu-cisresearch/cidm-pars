@@ -15,7 +15,7 @@ Entity Relational Digram
 
 ### ERD (solves archiving)
 
-![Alt text](erd.jpeg?raw=true "ERD")
+![Alt text](_erd.jpeg?raw=true "ERD")
 
 ### ERD (does not consider archiving)
 
