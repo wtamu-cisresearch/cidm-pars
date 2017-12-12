@@ -13,10 +13,15 @@ Work in progress...
 Entity Relational Digram
 -------------
 
+### New ERD (solves archiving)
 
 ![Alt text](new-erd.jpeg?raw=true "New ERD")
 
-### Queries to populate the new entities:
+### New ERD (does not consider archiving)
+
+![Alt text](new-erd.jpeg?raw=true "New ERD")
+
+## Queries to populate the new entities:
 
 > **Note:** Not fully tested
 
