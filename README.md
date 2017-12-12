@@ -1,4 +1,4 @@
-Welcome to PARS (Program Accreditation Reporting System)
+Welcome to PARS (Program Assessment Reporting System)
 ===================
 
 Work in progress...
@@ -13,13 +13,13 @@ Work in progress...
 Entity Relational Digram
 -------------
 
-### New ERD (solves archiving)
+### ERD (solves archiving)
 
-![Alt text](new-idea-erd.jpeg?raw=true "New Idea ERD")
+![Alt text](erd.jpeg?raw=true "ERD")
 
-### New ERD (does not consider archiving)
+### ERD (does not consider archiving)
 
-![Alt text](new-erd.jpeg?raw=true "New ERD")
+![Alt text](new-erd.jpeg?raw=true "ERD")
 
 #### Queries to populate the new entities:
 
