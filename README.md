@@ -21,7 +21,7 @@ Entity Relational Digram
 
 ![Alt text](new-erd.jpeg?raw=true "New ERD")
 
-## Queries to populate the new entities:
+#### Queries to populate the new entities:
 
 > **Note:** Not fully tested
 
