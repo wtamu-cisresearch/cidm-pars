@@ -15,7 +15,7 @@ Entity Relational Digram
 
 ### New ERD (solves archiving)
 
-![Alt text](new-erd.jpeg?raw=true "New ERD")
+![Alt text](new-idea-erd.jpeg?raw=true "New Idea ERD")
 
 ### New ERD (does not consider archiving)
 
