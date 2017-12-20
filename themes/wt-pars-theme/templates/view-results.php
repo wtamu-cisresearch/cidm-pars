@@ -12,7 +12,7 @@
     wp_enqueue_style( 'modal' );
     wp_enqueue_script( 'view-results' );
 
-    $periods = $wpdb->get_results( "SELECT DISTINCT year, term FROM assessment_data");
+    $periods = $wpdb->get_results( "SELECT DISTINCT year, term FROM pars_section");
 
     if($_GET['_period']){
         parse_str($_GET['_period'], $output);
