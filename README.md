@@ -15,7 +15,7 @@ Entity Relational Digram
 
 > **Design Idea:** The admin will have a window in the dashboard in which he will create a new section, and add all of the course learning outcomes that go with it. The admin will then go to another window in which he will see all of the course learning outcomes that he has assigned to sections and map them with the appropiate student outcomes and program learning objectives. The instructors will then be able to view the new sections assigned to them, modify the section table and add records to the measure table. 
 
-![Alt text](erd.jpeg?raw=true "ERD")
+![Alt text](_erd.jpeg?raw=true "ERD")
 
 ```sql
 /*pars_course*/ 
@@ -35,14 +35,13 @@ SELECT PloNo, PloDec FROM `plo` GROUP BY PloDec
 /*pars_program_educational_objective*/ 
 SELECT peo AS CODE, peo_description AS description FROM program_educational_objective GROUP BY peo_description   
 /*pars_beta*/ 
-SELECT DISTINCT X.alpha_id, pars_program_educational_objective.peo_id, pars_student_outcome.so_id FROM ploclomap, plo, plopeomap, program_education_objective, pars_program_educational_objective, pars_student_outcome, clo, ( SELECT pars_alpha.alpha_id, pars_course_learning_outcome.code FROM pars_alpha, pars_course_learning_outcome WHERE pars_alpha.clo_id = pars_course_learning_outcome.clo_id ) AS X WHERE plo.nid11 = ploclomap.PloNo AND plo.nid11 = plopeomap.plo AND plopeomap.peo = program_education_objective.nid AND plo.PloDec = pars_student_outcome.description AND program_education_objective.peo_description = pars_program_educational_objective.description AND clo.CloNo = ploclomap.CloNo AND X.code = clo.CloNo  
+SELECT DISTINCT pars_alpha.alpha_id, pars_student_outcome.so_id, plo.nid11 FROM ploclomap, pars_alpha, plo, pars_student_outcome, plopeomap, program_education_objective, pars_program_educational_objective, ( SELECT DISTINCT pars_course_learning_outcome.clo_id, pars_section.section_id, clo.CloNo FROM clo_measures, clo, pars_section, pars_course, pars_course_learning_outcome WHERE clo_measures.CloNo = clo.CloNo AND pars_section.course_id = pars_course.course_id AND clo.course = pars_course.code AND pars_section.section = clo.section AND clo.term = pars_section.term AND clo.year = pars_section.year AND clo.CloDec = pars_course_learning_outcome.description ) AS X WHERE X.CloNO = ploclomap.CloNo AND pars_alpha.section_id = X.section_id AND pars_alpha.clo_id = X.clo_id AND ploclomap.PloNo = plo.nid11 AND plo.PloDec = pars_student_outcome.description AND plo.nid11 = plopeomap.plo AND plopeomap.peo = program_education_objective.nid AND pars_program_educational_objective.description = program_education_objective.peo_description
 /*test alpha*/ 
 SELECT pars_course.code, pars_section.section, pars_section.year, pars_section.term, pars_course_learning_outcome.code, pars_course_learning_outcome.description FROM pars_course, pars_section, pars_alpha, pars_course_learning_outcome WHERE pars_section.course_id = pars_course.course_id AND pars_section.year = 2015 AND pars_section.term = "Spring" AND pars_course.code = "CIDM 1315" AND pars_section.section = 1 AND pars_section.section_id = pars_alpha.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id  
 /*test beta*/ 
 SELECT pars_course.code, pars_section.section, pars_section.year, pars_student_outcome.code, pars_student_outcome.description, pars_section.term, pars_course_learning_outcome.code, pars_course_learning_outcome.description FROM pars_course, pars_section, pars_alpha, pars_course_learning_outcome, pars_beta, pars_student_outcome WHERE pars_section.course_id = pars_course.course_id AND pars_section.year = 2016 AND pars_section.term = "Spring" AND pars_course.code = "CIDM 4390" AND pars_section.section = 1 AND pars_section.section_id = pars_alpha.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id AND pars_beta.alpha_id = pars_alpha.alpha_id AND pars_beta.so_id = pars_student_outcome.so_id GROUP BY pars_course_learning_outcome.code 
 /*test measure*/
 SELECT pars_course.code, pars_section.section, pars_section.year, pars_section.term, pars_course_learning_outcome.code, pars_course_learning_outcome.description, pars_measure.type, pars_measure.exemplary, pars_measure.satisfactory, pars_measure.unsatisfactory FROM pars_course, pars_section, pars_alpha, pars_course_learning_outcome, pars_measure WHERE pars_section.course_id = pars_course.course_id AND pars_section.year = 2011 AND pars_section.term = "Fall" AND pars_course.code = "CIDM 2342" AND pars_section.section = 1 AND pars_section.section_id = pars_alpha.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id
-
 ```
 
 ----------
