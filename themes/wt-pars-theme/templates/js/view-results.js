@@ -2,25 +2,29 @@ var modal = document.getElementById('myModal');
 
 var span = document.getElementsByClassName("close")[0];
 
-function view(course){
+function view(section_id){
     modal.style.display = "block";
-    console.log(course);
+    console.log(section_id);
 
-    document.getElementById("_year").innerText = course.year;
-    document.getElementById("_term").innerText = course.term;
-    document.getElementById("_course").innerText = course.course;
-    document.getElementById("_section").innerText = course.section;
+    $.get('http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/test/' + section_id, function(data, status){
+        alert("Data: " + data + "\nStatus: " + status);
+    });
 
-    fetchDescription(course.course);
-    fetchCoordinator(course.course, course.year, course.term, course.section);
-    fetchGrades(course.course, course.year, course.term, course.section);
-    fetchCloMeasures(course.course, course.year, course.term, course.section);
-    fetchCloMapping(course.course, course.year, course.term, course.section);
+    // document.getElementById("_year").innerText = course.year;
+    // document.getElementById("_term").innerText = course.term;
+    // document.getElementById("_course").innerText = course.course;
+    // document.getElementById("_section").innerText = course.section;
 
-    document.getElementById('_modi').innerText = course.modification;
-    document.getElementById('_ref').innerText = course.reflection;
-    document.getElementById('_feed').innerText = course.feedback;
-    document.getElementById('_propAct').innerText = course.proposed_action;
+    // fetchDescription(course.course);
+    // fetchCoordinator(course.course, course.year, course.term, course.section);
+    // fetchGrades(course.course, course.year, course.term, course.section);
+    // fetchCloMeasures(course.course, course.year, course.term, course.section);
+    // fetchCloMapping(course.course, course.year, course.term, course.section);
+
+    // document.getElementById('_modi').innerText = course.modification;
+    // document.getElementById('_ref').innerText = course.reflection;
+    // document.getElementById('_feed').innerText = course.feedback;
+    // document.getElementById('_propAct').innerText = course.proposed_action;
 
 }
 

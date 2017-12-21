@@ -12,22 +12,51 @@
     wp_enqueue_style( 'modal' );
     wp_enqueue_script( 'view-results' );
 
-    $periods = $wpdb->get_results( "SELECT DISTINCT year, term FROM pars_section");
+    $periods = $wpdb->get_results( "SELECT DISTINCT year, term FROM pars_section ORDER BY year");
 
     if($_GET['_period']){
         parse_str($_GET['_period'], $output);
-        $records = $wpdb->get_results( 'SELECT * FROM assessment_data WHERE year ="' . $output["y"] . '" AND term ="' . $output["t"] .  '" ORDER BY course, section');
+        $default = $output['y'] . ' ' . $output['t'];
+        $records = $wpdb->get_results( "SELECT
+                                            pars_section.section_id,
+                                            pars_course.code AS course,
+                                            pars_section.section AS section,
+                                            pars_section.year AS year,
+                                            pars_section.term AS term
+                                        FROM
+                                            pars_section,
+                                            pars_course
+                                        WHERE
+                                            pars_section.course_id = pars_course.course_id AND pars_section.year = '" . $output['y'] . "' AND pars_section.term = '" . $output['t'] .  "'
+                                        ORDER BY
+                                            course,
+                                            section" );
     }
     else{
-        $records = $wpdb->get_results( 'SELECT * FROM assessment_data WHERE year = (SELECT MAX(year) as year FROM assessment_data) AND term = "Fall" ORDER BY course, section');
+        $default = '2010 Fall';
+        $records = $wpdb->get_results( "SELECT
+                                            pars_section.section_id,
+                                            pars_course.code AS course,
+                                            pars_section.section AS section,
+                                            pars_section.year AS year,
+                                            pars_section.term AS term
+                                        FROM
+                                            pars_section,
+                                            pars_course
+                                        WHERE
+                                            pars_section.course_id = pars_course.course_id AND pars_section.year = 2010 AND pars_section.term = 'Fall'
+                                        ORDER BY
+                                            course,
+                                            section" );
     }
 
-    echo '<form action="" method="get">
-            <select name="_period">
-            ' . popList($periods) . '
+    echo "<form action='' method='get'>
+            <select name='_period'>
+                <option hidden default>" . $default . "</option>
+                " . popList($periods) . "
             </select>
             <button>Submit</button>
-        </form>';
+        </form>";
 
     echo "<table class='table table-striped'>
             <thead>
@@ -54,12 +83,8 @@
     function popTable($records){
         $tr = '';
         foreach ( $records as $record ) {
-            // $record->modification = urlencode($record->modification);
-            // $record->feedback = urlencode($record->feedback);
-            // $record->reflection = urlencode($record->reflection);
-            // $record->proposed_action = urlencode($record->reflection);
             $tr = $tr . "<tr>
-                            <td><a href='#' id='myBtn' onclick='view(" .  json_encode($record) . ")'>" . $record->course . "</a></td>
+                            <td><a href='#' id='myBtn' onclick='view(" .  $record->section_id . ")'>" . $record->course . "</a></td>
                             <td>" . $record->section . "</td>
                             <td>" . $record->year . "</td>
                             <td>" . $record->term . "</td> 
