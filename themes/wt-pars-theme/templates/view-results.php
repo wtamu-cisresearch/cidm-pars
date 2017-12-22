@@ -33,7 +33,7 @@
                                             section" );
     }
     else{
-        $default = '2010 Fall';
+        $default = '2010 Spring';
         $records = $wpdb->get_results( "SELECT
                                             pars_section.section_id,
                                             pars_course.code AS course,
@@ -44,7 +44,7 @@
                                             pars_section,
                                             pars_course
                                         WHERE
-                                            pars_section.course_id = pars_course.course_id AND pars_section.year = 2010 AND pars_section.term = 'Fall'
+                                            pars_section.course_id = pars_course.course_id AND pars_section.year = 2010 AND pars_section.term = 'Spring'
                                         ORDER BY
                                             course,
                                             section" );

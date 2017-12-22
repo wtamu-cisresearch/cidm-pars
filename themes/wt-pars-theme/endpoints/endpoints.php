@@ -5,6 +5,10 @@
             'methods' => 'GET',
             'callback' => 'get_viewresults',
         ) );
+        register_rest_route( 'wt-pars-theme/v2', '/studentoutcomes/(?P<id>\d+)', array(
+            'methods' => 'GET',
+            'callback' => 'get_studentoutcomes',
+        ) );
     } );
 
     function get_viewresults( $data ) {
@@ -48,6 +52,13 @@
                                     WHERE
                                         pars_section.course_id = pars_course.course_id AND pars_section.section_id = " . $data['id']. " AND pars_alpha.section_id = pars_section.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_beta.alpha_id = pars_alpha.alpha_id AND pars_beta.so_id = pars_student_outcome.so_id");  
                                     
+        return $record;
+    }
+
+    function get_studentoutcomes( $data ) {
+        global $wpdb;
+        $record = $wpdb->get_results( "SELECT * FROM grades WHERE course = '" . $course . "'  AND year = '" . $data['year'] . "' AND term = '" . $data['term'] . "' AND section = '" . $data['section'] . "' ");
+    
         return $record;
     }
 

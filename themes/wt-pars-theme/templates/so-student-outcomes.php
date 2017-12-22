@@ -13,83 +13,133 @@
     wp_enqueue_style( 'modal' );
     wp_enqueue_script( 'so-student-outcomes' );
 
-    $periods = $wpdb->get_results( "SELECT DISTINCT year, term FROM ploclomap");
+    $periods = $wpdb->get_results( "SELECT DISTINCT year, term FROM pars_section ORDER BY year");
 
     if($_GET['_period']){
         parse_str($_GET['_period'], $p);
-        $records = $wpdb->get_results( "
-                                            SELECT plo.PloNo AS 'sonumber', plo.PloDec AS 'sodes', clo_measures.PloNo AS 'soid',
+        $default = $p['y'] . ' ' . $p['t'];
+        $records = $wpdb->get_results( " SELECT
+                                            pars_student_outcome.code AS sonumber,
+                                            pars_student_outcome.description sodes,
                                             ROUND(
                                                 (
-                                                    SUM(clo_measures.Epercentage) /(
-                                                        SUM(clo_measures.Epercentage) + SUM(clo_measures.Gpercentage) + SUM(clo_measures.Spercentage) + SUM(clo_measures.Ppercentage) + SUM(clo_measures.Upercentage)
+                                                    SUM(pars_measure.exemplary) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                     ) * 100
                                                 ),
                                                 2
-                                            ) AS 'exemplary',
+                                            ) AS exemplary,
                                             ROUND(
                                                 (
-                                                    SUM(clo_measures.Spercentage) /(
-                                                        SUM(clo_measures.Epercentage) + SUM(clo_measures.Gpercentage) + SUM(clo_measures.Spercentage) + SUM(clo_measures.Ppercentage) + SUM(clo_measures.Upercentage)
+                                                    SUM(pars_measure.good) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                     ) * 100
                                                 ),
                                                 2
-                                            ) AS 'satisfactory',
+                                            ) AS good,
                                             ROUND(
                                                 (
-                                                    SUM(clo_measures.Upercentage) /(
-                                                        SUM(clo_measures.Epercentage) + SUM(clo_measures.Gpercentage) + SUM(clo_measures.Spercentage) + SUM(clo_measures.Ppercentage) + SUM(clo_measures.Upercentage)
+                                                    SUM(pars_measure.satisfactory) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                     ) * 100
                                                 ),
                                                 2
-                                            ) AS 'unsatisfactory'
-                                            FROM clo_measures
-                                            INNER JOIN plo WHERE clo_measures.PloNo = plo.nid11 AND clo_measures.year = '" . $p['y'] . "' AND clo_measures.term = '" . $p['t'] . "'
-                                            GROUP BY sonumber
+                                            ) AS satisfactory,
+                                            ROUND(
+                                                (
+                                                    SUM(pars_measure.poor) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
+                                                    ) * 100
+                                                ),
+                                                2
+                                            ) AS poor,
+                                            ROUND(
+                                                (
+                                                    SUM(pars_measure.unsatisfactory) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
+                                                    ) * 100
+                                                ),
+                                                2
+                                            ) AS unsatisfactory
+                                        FROM
+                                            pars_section,
+                                            pars_measure,
+                                            pars_alpha,
+                                            pars_beta,
+                                            pars_student_outcome
+                                        WHERE
+                                            pars_section.section_id = pars_alpha.section_id AND pars_alpha.alpha_id = pars_beta.alpha_id AND pars_beta.so_id = pars_student_outcome.so_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_section.year = '" . $p['y'] . "' AND pars_section.term = '" . $p['t'] . "'
+                                        GROUP BY
+                                            pars_student_outcome.code
                                     ");
     }
     else{
-         $records = $wpdb->get_results( "
-                                            SELECT plo.PloNo AS 'sonumber', plo.PloDec AS 'sodes', clo_measures.PloNo AS 'soid',
+         $default = '2010 Spring';
+         $records = $wpdb->get_results( "SELECT
+                                            pars_student_outcome.code AS sonumber,
+                                            pars_student_outcome.description sodes,
                                             ROUND(
                                                 (
-                                                    SUM(clo_measures.Epercentage) /(
-                                                        SUM(clo_measures.Epercentage) + SUM(clo_measures.Gpercentage) + SUM(clo_measures.Spercentage) + SUM(clo_measures.Ppercentage) + SUM(clo_measures.Upercentage)
+                                                    SUM(pars_measure.exemplary) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                     ) * 100
                                                 ),
                                                 2
-                                            ) AS 'exemplary',
+                                            ) AS exemplary,
                                             ROUND(
                                                 (
-                                                    SUM(clo_measures.Spercentage) /(
-                                                        SUM(clo_measures.Epercentage) + SUM(clo_measures.Gpercentage) + SUM(clo_measures.Spercentage) + SUM(clo_measures.Ppercentage) + SUM(clo_measures.Upercentage)
+                                                    SUM(pars_measure.good) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                     ) * 100
                                                 ),
                                                 2
-                                            ) AS 'satisfactory',
+                                            ) AS good,
                                             ROUND(
                                                 (
-                                                    SUM(clo_measures.Upercentage) /(
-                                                        SUM(clo_measures.Epercentage) + SUM(clo_measures.Gpercentage) + SUM(clo_measures.Spercentage) + SUM(clo_measures.Ppercentage) + SUM(clo_measures.Upercentage)
+                                                    SUM(pars_measure.satisfactory) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                     ) * 100
                                                 ),
                                                 2
-                                            ) AS 'unsatisfactory'
-                                            FROM clo_measures
-                                            INNER JOIN plo WHERE clo_measures.PloNo = plo.nid11 AND clo_measures.year = '2010' AND clo_measures.term = 'Spring'
-                                            GROUP BY sonumber
+                                            ) AS satisfactory,
+                                            ROUND(
+                                                (
+                                                    SUM(pars_measure.poor) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
+                                                    ) * 100
+                                                ),
+                                                2
+                                            ) AS poor,
+                                            ROUND(
+                                                (
+                                                    SUM(pars_measure.unsatisfactory) /(
+                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
+                                                    ) * 100
+                                                ),
+                                                2
+                                            ) AS unsatisfactory
+                                        FROM
+                                            pars_section,
+                                            pars_measure,
+                                            pars_alpha,
+                                            pars_beta,
+                                            pars_student_outcome
+                                        WHERE
+                                            pars_section.section_id = pars_alpha.section_id AND pars_alpha.alpha_id = pars_beta.alpha_id AND pars_beta.so_id = pars_student_outcome.so_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_section.year = 2010 AND pars_section.term = 'Spring'
+                                        GROUP BY
+                                            pars_student_outcome.code
                                         ");
     }
 
-    echo '
-        <form action="" method="get">
-            <select name="_period">
-                <option default> - Select a Period - </option>
-                ' . popuList($periods) . '
+    echo "
+        <form action='' method='get'>
+            <select name='_period'>
+                <option hidden default>" . $default . "</option>
+                " . popuList($periods) . "
             </select>
             <button>Submit</button>
         </form>
-        <table class="table table-striped">
+        <table class='table table-striped'>
             <thead>
                 <tr>
                     <td>Student Outcome</td>
@@ -99,9 +149,9 @@
                 </tr>
             </thead>
             <tbody>
-                ' . popTable($records, $p) . '
+                " . popTable($records, $p) . "
             <tbody>               
-        </table>';
+        </table>";
 
     function popuList($periods){        
         $option = '';
