@@ -2,31 +2,28 @@ var modal = document.getElementById('myModal');
 
 var span = document.getElementsByClassName("close")[0];
 
-function cloReport(soid, year, term) {
+function cloReport(so_id, year, term) {
 
+    console.log(so_id + ' ' + year + ' ' + term);
     modal.style.display = "block";
-    console.log(soid, year, term);
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            var record = xmlHttp.responseText;
-            record = JSON.parse(record);
 
-            var hook = document.getElementById('measuresHook');
+    $.get('http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-theme/v2/studentoutcomes/' + so_id + '/' + year + '/' + term , function(data, status){
+        console.log("Data: " + data + "\nStatus: " + status);
 
-            for (var r in record) {
-                var sum = parseInt(record[r].exemplary) + parseInt(record[r].good) + parseInt(record[r].satisfactory) + parseInt(record[r].poor) + parseInt(record[r].unsatisfactory);
-                var tr = document.createElement('tr');
-                hook.appendChild(tr);
-                tr.appendChild(document.createElement('td')).innerText = record[r].clonumber + ' ' + record[r].clodes;
-                tr.appendChild(document.createElement('td')).innerText = record[r].exemplary + '%';
-                tr.appendChild(document.createElement('td')).innerText = record[r].satisfactory + '%';
-                tr.appendChild(document.createElement('td')).innerText = record[r].unsatisfactory + '%';
-            }
-        }
-    }
-    xmlHttp.open("GET", 'http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/cloreport/' + soid + '/' + year + '/' + term, true); // false for synchronous request
-    xmlHttp.send(null);
+        var hook = document.getElementById('measuresHook');
+        
+        for (var d in data) {
+            var sum = parseInt(data[d].exemplary) + parseInt(data[d].good) + parseInt(data[d].satisfactory) + parseInt(data[d].poor) + parseInt(data[d].unsatisfactory);
+            var tr = document.createElement('tr');
+            hook.appendChild(tr);
+            tr.appendChild(document.createElement('td')).innerText = data[d].clo_code + ' ' + data[d].clo_description;
+            tr.appendChild(document.createElement('td')).innerText = data[d].exemplary + '%';
+            tr.appendChild(document.createElement('td')).innerText = data[d].satisfactory + '%';
+            tr.appendChild(document.createElement('td')).innerText = data[d].unsatisfactory + '%';
+        }    
+
+    });
+
 }
 
 
