@@ -12,6 +12,10 @@
 
     wp_enqueue_style( 'modal' );
     wp_enqueue_script( 'peo-program-educational-objective' );
+    wp_localize_script( 'peo-program-educational-objective', 'settings', array(
+        'root' => esc_url_raw( rest_url() ),
+        'nonce' => wp_create_nonce( 'wp_rest' )
+    ) );
 
     $periods = $wpdb->get_results( "SELECT DISTINCT year, term FROM pars_section ORDER BY year");
 

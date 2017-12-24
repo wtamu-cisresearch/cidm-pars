@@ -4,16 +4,38 @@
         register_rest_route( 'wt-pars-theme/v2', '/viewresults/(?P<id>\d+)', array(
             'methods' => 'GET',
             'callback' => 'get_viewresults',
+            'permission_callback' => 'check_levelTwo',
         ) );
         register_rest_route( 'wt-pars-theme/v2', '/studentoutcomes/(?P<so_id>\d+)/(?P<year>\d+)/(?P<term>\w+)', array(
             'methods' => 'GET',
             'callback' => 'get_studentOutcomes',
+            'permission_callback' => 'check_levelTwo',
         ) );
         register_rest_route( 'wt-pars-theme/v2', '/programeducationalobjective/(?P<peo_id>\d+)/(?P<year>\d+)/(?P<term>\w+)', array(
             'methods' => 'GET',
             'callback' => 'get_programEducationalObjective',
+            'permission_callback' => 'check_levelTwo',
         ) );
     } );
+
+
+    function check_levelTwo(){
+        // Credit for the following six lines: Thomas Jensen, July 29 2012 https://stackoverflow.com/questions/541430/how-do-i-read-any-request-header-in-php
+        $headers = array();
+        foreach ($_SERVER as $key => $value) {
+            if (strpos($key, 'HTTP_') === 0) {
+                $headers[str_replace(' ', '', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))))] = $value;
+            }
+        }
+
+        $nonce = wp_verify_nonce($headers['XWpNonce'], 'wp_rest');
+
+        if ( !current_user_can('delete_others_pages') || $nonce == false ) {
+            return new WP_Error( 'rest_forbidden', esc_html__( 'OMG you can not view private data.', 'my-text-domain' ), array( 'status' => 401 ) );
+        }
+        
+        return true;
+    }
 
     function get_viewresults( $data ) {
         global $wpdb;
@@ -56,6 +78,8 @@
                                     WHERE
                                         pars_section.course_id = pars_course.course_id AND pars_section.section_id = " . $data['id']. " AND pars_alpha.section_id = pars_section.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_beta.alpha_id = pars_alpha.alpha_id AND pars_beta.so_id = pars_student_outcome.so_id");  
                                     
+
+        
         return $data;
     }
 
