@@ -17,7 +17,7 @@
     wp_register_script( 'clo-management', get_stylesheet_directory_uri().'/admin-pages/js/clo-management.js' );
     wp_register_script( 'peo-management', get_stylesheet_directory_uri().'/admin-pages/js/peo-management.js' );
     wp_register_script( 'so-management', get_stylesheet_directory_uri().'/admin-pages/js/so-management.js' );
-    wp_register_script( 'mapping', get_stylesheet_directory_uri().'/templates/js/mapping.js' );
+    wp_register_script( 'mapping', get_stylesheet_directory_uri().'/admin-pages/js/mapping.js' );
 
     // For templates
     wp_register_script( 'view-results', get_stylesheet_directory_uri().'/templates/js/view-results.js' );

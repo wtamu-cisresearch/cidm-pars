@@ -5,4 +5,5 @@
 
     wp_enqueue_script( 'mapping' );
 
+    echo "<div class='box'></div> <div class='box'></div>"
 ?>
