@@ -10,13 +10,13 @@
 
     
     if($_GET['_page']){
-        $records = $wpdb->get_results( "SELECT * FROM clo LIMIT " . $_GET['_page'] * 10 . ", 10");
+        $records = $wpdb->get_results( "SELECT * FROM pars_course_learning_outcome LIMIT " . $_GET['_page'] * 10 . ", 10");
     }
     else{
-        $records = $wpdb->get_results( "SELECT * FROM clo LIMIT 0, 10");
+        $records = $wpdb->get_results( "SELECT * FROM pars_course_learning_outcome LIMIT 0, 10");
     }
 
-    $pages = $wpdb->get_results( "SELECT COUNT(nid5) AS number FROM clo");
+    $pages = $wpdb->get_results( "SELECT COUNT(clo_id) AS number FROM pars_course_learning_outcome");
 
     echo "
         <div style='padding:20px;'>
@@ -24,11 +24,8 @@
             <table class='table table-striped'>
                 <thead>
                     <tr>
-                        <th>Course</th>
-                        <th>CLO Number</th>
+                        <th>CLO Code</th>
                         <th>CLO Description</th>
-                        <th>Term</th>
-                        <th>Year</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -83,12 +80,9 @@
         $tr = "";
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
-                            <td>" . $record->course . "</td>
-                            <td>" . $record->CloNo . "</td>
-                            <td>" . $record->CloDec . "</td>
-                            <td>" . $record->term . "</td>
-                            <td>" . $record->year . "</td>
-                            <td><a href='#' id='myBtn' onclick='pop(" . json_encode($record) . ")'> Edit | Delete </a></td> 
+                            <td>" . $record->code . "</td>
+                            <td>" . $record->description . "</td>
+                            <td><a href='#' id='myBtn' onclick='pop(" . $record->clo_id . ")'> Edit | Delete </a></td> 
                         </tr>";
         }
         return $tr;

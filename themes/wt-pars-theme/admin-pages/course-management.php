@@ -9,13 +9,13 @@
     wp_enqueue_script( 'course-management' );
 
     if($_GET['_page']){
-        $records = $wpdb->get_results( "SELECT * FROM course LIMIT " . $_GET['_page'] * 10 . ", 10");
+        $records = $wpdb->get_results( "SELECT * FROM pars_course LIMIT " . $_GET['_page'] * 10 . ", 10");
     }
     else{
-        $records = $wpdb->get_results( "SELECT * FROM course LIMIT 0, 10");
+        $records = $wpdb->get_results( "SELECT * FROM pars_course LIMIT 0, 10");
     }
 
-    $pages = $wpdb->get_results( "SELECT COUNT(nid1) AS number FROM course");
+    $pages = $wpdb->get_results( "SELECT COUNT(course_id) AS number FROM pars_course");
 
     echo "
         <div style='padding:20px;'>
@@ -23,12 +23,9 @@
             <table class='table table-striped'>
                 <thead>
                     <tr>
-                        <th>Course</th>
+                        <th>Course Code</th>
                         <th>Course Name</th>
                         <th>Course Description</th>
-                        <th>Section</th>
-                        <th>Term</th>
-                        <th>Year</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -83,13 +80,10 @@
         $tr = '';
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
-                            <td>" . $record->course . "</td>
-                            <td>" . $record->course_name . "</td>
-                            <td>" . $record->course_description . "</td>
-                            <td>" . $record->section . "</td>
-                            <td>" . $record->term . "</td>
-                            <td>" . $record->year . "</td>
-                            <td><a href='#' id='myBtn' onclick='pop(" . json_encode($record) . ")'> Edit | Delete </a></td> 
+                            <td>" . $record->code . "</td>
+                            <td>" . $record->name . "</td>
+                            <td>" . $record->description . "</td>
+                            <td><a href='#' id='myBtn' onclick='pop(" . $record->course_id . ")'> Edit | Delete </a></td> 
                         </tr>";
         }
         return $tr;

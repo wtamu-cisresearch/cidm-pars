@@ -9,13 +9,13 @@
     wp_enqueue_script( 'peo-management' );
 
     if($_GET['_page']){
-        $records = $wpdb->get_results( "SELECT * FROM program_education_objective LIMIT " . $_GET['_page'] * 10 . ", 10");
+        $records = $wpdb->get_results( "SELECT * FROM pars_program_educational_objective LIMIT " . $_GET['_page'] * 10 . ", 10");
     }
     else{
-        $records = $wpdb->get_results( "SELECT * FROM program_education_objective LIMIT 0, 10");
+        $records = $wpdb->get_results( "SELECT * FROM pars_program_educational_objective LIMIT 0, 10");
     }
     
-    $pages = $wpdb->get_results( "SELECT COUNT(nid) AS number FROM program_education_objective");
+    $pages = $wpdb->get_results( "SELECT COUNT(peo_id) AS number FROM pars_program_educational_objective");
 
     echo "
         <div style='padding:20px;'>
@@ -26,10 +26,8 @@
                         <th colspan='5'>Program Educational Objectives</th>
                     </tr>
                         <tr>
-                            <th>PEO</th>
-                            <th>PEO Description</th>
-                            <th>Term</th>
-                            <th>Year</th>
+                            <th>PEO Code</th>
+                            <th>Description</th>
                             <th>Action</th>
                         </tr>
                 </thead>
@@ -84,11 +82,9 @@
         $tr = '';
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
-                            <td>" . $record->peo . "</td>
-                            <td>" . $record->peo_description . "</td>
-                            <td>" . $record->term . "</td>
-                            <td>" . $record->year . "</td>
-                            <td><a href='#' id='myBtn' onclick='pop(" . json_encode($record) . ")'> Edit | Delete </a></td> 
+                            <td>" . $record->code . "</td>
+                            <td>" . $record->description . "</td>
+                            <td><a href='#' id='myBtn' onclick='pop(" . $record->peo_id . ")'> Edit | Delete </a></td> 
                         </tr>";
         }
         return $tr;

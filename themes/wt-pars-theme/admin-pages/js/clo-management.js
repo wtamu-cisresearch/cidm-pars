@@ -8,23 +8,23 @@ function pop(record){
     
     modal.style.display = "block";
 
-    if(record){
-        document.getElementById('edit').style.display = "block";
-        document.getElementById('add').style.display = "none";
-        _id = record.nid5;
+    // if(record){
+    //     document.getElementById('edit').style.display = "block";
+    //     document.getElementById('add').style.display = "none";
+    //     _id = record.nid5;
 
-        document.getElementById("year").value = record.year;
-        document.getElementById("term").value = record.term;
-        document.getElementById("course").value = record.course;
-        document.getElementById("section").value = record.section;
-        document.getElementById("clonumber").value = record.CloNo;
-        document.getElementById("clodes").value = record.CloDec;
-    }
-    else{
-        document.getElementById('edit').style.display = "none";
-        document.getElementById('add').style.display = "block";
-        _id = null;
-    }
+    //     document.getElementById("year").value = record.year;
+    //     document.getElementById("term").value = record.term;
+    //     document.getElementById("course").value = record.course;
+    //     document.getElementById("section").value = record.section;
+    //     document.getElementById("clonumber").value = record.CloNo;
+    //     document.getElementById("clodes").value = record.CloDec;
+    // }
+    // else{
+    //     document.getElementById('edit').style.display = "none";
+    //     document.getElementById('add').style.display = "block";
+    //     _id = null;
+    // }
 }
 
 function submit(){    

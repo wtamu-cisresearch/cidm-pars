@@ -8,21 +8,21 @@ function pop(record){
     
     modal.style.display = "block";
 
-    if(record){
-        document.getElementById('edit').style.display = "block";
-        document.getElementById('add').style.display = "none";
-        _id = record.nid;
+    // if(record){
+    //     document.getElementById('edit').style.display = "block";
+    //     document.getElementById('add').style.display = "none";
+    //     _id = record.nid;
 
-        document.getElementById("year").value = record.year;
-        document.getElementById("term").value = record.term;
-        document.getElementById("peonumber").value = record.peo;
-        document.getElementById("peodes").value = record.peo_description;
-    }
-    else{
-        document.getElementById('edit').style.display = "none";
-        document.getElementById('add').style.display = "block";
-        _id = null;
-    }
+    //     document.getElementById("year").value = record.year;
+    //     document.getElementById("term").value = record.term;
+    //     document.getElementById("peonumber").value = record.peo;
+    //     document.getElementById("peodes").value = record.peo_description;
+    // }
+    // else{
+    //     document.getElementById('edit').style.display = "none";
+    //     document.getElementById('add').style.display = "block";
+    //     _id = null;
+    // }
 }
 
 function submit(){    

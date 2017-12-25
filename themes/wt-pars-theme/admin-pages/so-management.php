@@ -9,13 +9,13 @@
     wp_enqueue_script( 'so-management' );
 
     if($_GET['_page']){
-        $records = $wpdb->get_results( "SELECT * FROM plo ORDER BY PloNo LIMIT " . $_GET['_page'] * 10 . ", 10");
+        $records = $wpdb->get_results( "SELECT * FROM plo LIMIT " . $_GET['_page'] * 10 . ", 10");
     }
     else{
-        $records = $wpdb->get_results( "SELECT * FROM plo ORDER BY PloNo LIMIT 0, 10");
+        $records = $wpdb->get_results( "SELECT * FROM pars_student_outcome LIMIT 0, 10");
     }
 
-    $pages = $wpdb->get_results( "SELECT COUNT(nid11) AS number FROM plo");
+    $pages = $wpdb->get_results( "SELECT COUNT(so_id) AS number FROM pars_student_outcome");
 
     echo "
         <div style='padding:20px;'>
@@ -23,13 +23,10 @@
             <table class='table table-striped'>
                 <thead>
                     <tr>
-                        <th colspan='5'>Student Outcomes</th>
+                        <th>SO Code</th>
+                        <th>Description</th>
+                        <th>Action</th>
                     </tr>
-                        <tr>
-                            <th>Student Outcome Number</th>
-                            <th>Student Outcome Description</th>
-                            <th>Action</th>
-                        </tr>
                 </thead>
                 <tbody>
                     " . popTable($records) . " 
@@ -81,9 +78,9 @@
         $tr = "";
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
-                            <td>" . $record->PloNo . "</td>
-                            <td>" . $record->PloDec . "</td>
-                            <td><a href='#' id='myBtn' onclick='pop(" . json_encode($record) . ")'> Edit | Delete </a></td> 
+                            <td>" . $record->code . "</td>
+                            <td>" . $record->description . "</td>
+                            <td><a href='#' id='myBtn' onclick='pop(" . $record->so_id . ")'> Edit | Delete </a></td> 
                         </tr>";
         }
         return $tr;
