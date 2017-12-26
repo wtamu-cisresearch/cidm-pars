@@ -179,7 +179,7 @@
         }
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
-                            <td><a href='#' id='myBtn' onclick='cloReport(" . $record->so_id . ", " . $year . ", `" . $term . "`)'>" . $record->sonumber . " - " . $record->sodes . "</td>
+                            <td><a href='#' class='record' data-so_id='" . $record->so_id . "' data-year='" . $year . "' data-term='" . $term . "'>" . $record->sonumber . " - " . $record->sodes . "</td>
                             <td>" . $record->exemplary . "%</td>
                             <td>" . $record->satisfactory . "%</td>
                             <td>" . $record->unsatisfactory . "%</td>
@@ -189,5 +189,4 @@
     }
 
     get_footer();
-
 ?>

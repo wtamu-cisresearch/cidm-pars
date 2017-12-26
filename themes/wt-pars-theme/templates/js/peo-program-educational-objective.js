@@ -1,55 +1,49 @@
+(function($){
+    $(document).ready(function() {
 
-var modal = document.getElementById('myModal');
+        $(".record").on("click", function(){
 
-var span = document.getElementsByClassName("close")[0];
+            $("#myModal").show();
 
-function cloReport(so_id, year, term){
-    
-    console.log(so_id, year, term);
+            var peo_id = $(this).data("peo_id");
+            var year = $(this).data("year");
+            var term = $(this).data("term");
 
-    modal.style.display = "block";
-
-    $.ajax({
-        url: settings.root + 'wt-pars-theme/v2/programeducationalobjective/' + so_id + '/' + year + '/' + term,
-        method: 'GET',
-        beforeSend: function(xhr){
-            xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
-        },
-        success: function (data) {
-
-            var hook = document.getElementById('measuresHook');
+            $.ajax({
+                url: settings.root + 'wt-pars-theme/v2/programeducationalobjective/' + peo_id + '/' + year + '/' + term,
+                method: 'GET',
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                },
+                success: function (data) {
+                    for (var d in data) {
+                        var sum = parseInt(data[d].exemplary) + parseInt(data[d].good) + parseInt(data[d].satisfactory) + parseInt(data[d].poor) + parseInt(data[d].unsatisfactory);
+                        var tr = document.createElement('tr');
+                        $("#measuresHook").append(tr);
+                        tr.appendChild(document.createElement('td')).innerText = data[d].sonumber + ' ' + data[d].sodes;
+                        tr.appendChild(document.createElement('td')).innerText = data[d].exemplary + '%';
+                        tr.appendChild(document.createElement('td')).innerText = data[d].satisfactory + '%';
+                        tr.appendChild(document.createElement('td')).innerText = data[d].unsatisfactory + '%';
+                    }  
+        
+                },
+                error: function (xhr, status, error) {
+                    console.info(xhr.responseText);
+                },
+            })
             
-            for (var d in data) {
-                var sum = parseInt(data[d].exemplary) + parseInt(data[d].good) + parseInt(data[d].satisfactory) + parseInt(data[d].poor) + parseInt(data[d].unsatisfactory);
-                var tr = document.createElement('tr');
-                hook.appendChild(tr);
-                tr.appendChild(document.createElement('td')).innerText = data[d].sonumber + ' ' + data[d].sodes;
-                tr.appendChild(document.createElement('td')).innerText = data[d].exemplary + '%';
-                tr.appendChild(document.createElement('td')).innerText = data[d].satisfactory + '%';
-                tr.appendChild(document.createElement('td')).innerText = data[d].unsatisfactory + '%';
-            }  
+        });
 
-        },
-        error: function (xhr, status, error) {
-            console.info(xhr.responseText);
-        },
-    })
-}
+        $(".close").on("click", function(){
+            $("#measuresHook").text('');
+            $("#myModal").hide();
+        });
 
-
-function yaydata(data){
-    console.log(data);
-}
-
-span.onclick = function() {
-    document.getElementById('measuresHook').innerText = '';
-    modal.style.display = "none";    
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        document.getElementById('measuresHook').innerText = '';
-        modal.style.display = "none";
-    } 
-} 
-
+        $(window).on("click", function(event){
+            if (event.target == document.getElementById("myModal")) {
+                $("#measuresHook").text('');
+                $("#myModal").hide();
+            }
+        });
+    });
+})(jQuery);

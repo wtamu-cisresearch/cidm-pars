@@ -88,7 +88,7 @@
         $tr = '';
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
-                            <td><a href='#' id='myBtn' onclick='view(" .  $record->section_id . ")'>" . $record->course . "</a></td>
+                            <td><a href='#' class='record' data-section_id='" . $record->section_id . "'>" . $record->course . "</a></td>
                             <td>" . $record->section . "</td>
                             <td>" . $record->year . "</td>
                             <td>" . $record->term . "</td> 

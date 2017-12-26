@@ -1,50 +1,49 @@
+(function($){
+    $(document).ready(function() {
 
-var modal = document.getElementById('myModal');
+        $(".record").on("click", function(){
 
-var span = document.getElementsByClassName("close")[0];
+            $("#myModal").show();
 
-function cloReport(so_id, year, term) {
+            var so_id = $(this).data("so_id");
+            var year = $(this).data("year");
+            var term = $(this).data("term");
 
-    console.log(so_id + ' ' + year + ' ' + term);
-    modal.style.display = "block";
+            $.ajax({
+                url: settings.root + 'wt-pars-theme/v2/studentoutcomes/' + so_id + '/' + year + '/' + term,
+                method: 'GET',
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                },
+                success: function (data) {
+                    for (var d in data) {
+                        var sum = parseInt(data[d].exemplary) + parseInt(data[d].good) + parseInt(data[d].satisfactory) + parseInt(data[d].poor) + parseInt(data[d].unsatisfactory);
+                        var tr = document.createElement('tr');
+                        $("#measuresHook").append(tr);
+                        tr.appendChild(document.createElement('td')).innerText = data[d].clo_code + ' ' + data[d].clo_description;
+                        tr.appendChild(document.createElement('td')).innerText = data[d].exemplary + '%';
+                        tr.appendChild(document.createElement('td')).innerText = data[d].satisfactory + '%';
+                        tr.appendChild(document.createElement('td')).innerText = data[d].unsatisfactory + '%';
+                    }    
 
-    $.ajax({
-        url: settings.root + 'wt-pars-theme/v2/studentoutcomes/' + so_id + '/' + year + '/' + term,
-        method: 'GET',
-        beforeSend: function(xhr){
-            xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
-        },
-        success: function (data) {
-
-            var hook = document.getElementById('measuresHook');
+                },
+                error: function (xhr, status, error) {
+                    console.info(xhr.responseText);
+                },
+            })
             
-            for (var d in data) {
-                var sum = parseInt(data[d].exemplary) + parseInt(data[d].good) + parseInt(data[d].satisfactory) + parseInt(data[d].poor) + parseInt(data[d].unsatisfactory);
-                var tr = document.createElement('tr');
-                hook.appendChild(tr);
-                tr.appendChild(document.createElement('td')).innerText = data[d].clo_code + ' ' + data[d].clo_description;
-                tr.appendChild(document.createElement('td')).innerText = data[d].exemplary + '%';
-                tr.appendChild(document.createElement('td')).innerText = data[d].satisfactory + '%';
-                tr.appendChild(document.createElement('td')).innerText = data[d].unsatisfactory + '%';
-            }    
+        });
 
-        },
-        error: function (xhr, status, error) {
-            console.info(xhr.responseText);
-        },
-    })
-}
+        $(".close").on("click", function(){
+            $("#measuresHook").text('');
+            $("#myModal").hide();
+        });
 
-function yaydata(data) {
-    console.log(data);
-}
-
-span.onclick = function () {
-    modal.style.display = "none";
-}
-
-window.onclick = function (event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-} 
+        $(window).on("click", function(event){
+            if (event.target == document.getElementById("myModal")) {
+                $("#measuresHook").text('');
+                $("#myModal").hide();
+            }
+        });
+    });
+})(jQuery);
