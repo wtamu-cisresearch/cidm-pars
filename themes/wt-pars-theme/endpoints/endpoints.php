@@ -16,11 +16,44 @@
             'callback' => 'get_programEducationalObjective',
             'permission_callback' => 'check_levelTwo',
         ) );
+        register_rest_route( 'wt-pars-theme/v2', '/course/(?P<course_id>\d+)/(?P<code>.+)/(?P<name>.+)/(?P<description>.+)', array(
+            'methods' => 'PUT',
+            'callback' => 'put_course',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/course/(?P<code>.+)/(?P<name>.+)/(?P<description>.+)', array(
+            'methods' => 'POST',
+            'callback' => 'post_course',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/course/(?P<course_id>\d+)', array(
+            'methods' => 'DELETE',
+            'callback' => 'delete_course',
+            'permission_callback' => 'check_levelOne',
+        ) );
     } );
 
 
+    function check_levelOne(){
+        // Credit for the following six lines: Thomas Jensen - July 29, 2012 - https://stackoverflow.com/questions/541430/how-do-i-read-any-request-header-in-php
+        $headers = array();
+        foreach ($_SERVER as $key => $value) {
+            if (strpos($key, 'HTTP_') === 0) {
+                $headers[str_replace(' ', '', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))))] = $value;
+            }
+        }
+
+        $nonce = wp_verify_nonce($headers['XWpNonce'], 'wp_rest');
+
+        if ( !current_user_can('administrator') || $nonce == false ) {
+            return new WP_Error( 'rest_forbidden', esc_html__( 'OMG you can not view private data.', 'my-text-domain' ), array( 'status' => 401 ) );
+        }
+        
+        return true;
+    }
+
     function check_levelTwo(){
-        // Credit for the following six lines: Thomas Jensen, July 29 2012 https://stackoverflow.com/questions/541430/how-do-i-read-any-request-header-in-php
+        // Credit for the following six lines: Thomas Jensen - July 29, 2012 - https://stackoverflow.com/questions/541430/how-do-i-read-any-request-header-in-php
         $headers = array();
         foreach ($_SERVER as $key => $value) {
             if (strpos($key, 'HTTP_') === 0) {
@@ -199,6 +232,45 @@
                                     GROUP BY
                                         pars_student_outcome.code ");
         return $data;
+    }
+
+    function put_course( $data ){
+        global $wpdb;
+        $course_code = urldecode($data['code']);
+        $course_name = urldecode($data['name']);
+        $course_description = urldecode($data['description']);
+        $wpdb->update('pars_course',
+                        array(
+                            'code'=>$course_code,
+                            'name'=>$course_name,
+                            'description'=>$course_description
+                        ),
+                        array( 'course_id'=>$data['course_id'] )
+                    ); 
+        return true;
+    }
+
+    function post_course( $data ) {
+        global $wpdb;
+        $course_code = urldecode($data['code']);
+        $course_name = urldecode($data['name']);
+        $course_description = urldecode($data['description']);
+        $wpdb->insert('pars_course',
+                array(
+                    'code'=>$course_code,
+                    'name'=>$course_name,
+                    'description'=>$course_description
+                    )
+                );    
+    
+        return true;
+    }
+
+    function delete_course( $data ) {
+        global $wpdb;
+        $wpdb->delete( 'pars_course', array( 'course_id'=>$data['course_id']) );  
+    
+        return true;
     }
 
 ?>

@@ -1,6 +1,6 @@
 (function($){ 
     $(document).ready(function() {
-        // Credit for dragging technique: Taufik Nurrohman http://jsfiddle.net/tovic/mkUJf/
+        // Credit for dragging technique: Taufik Nurrohman - http://jsfiddle.net/tovic/mkUJf/
         $('#wpbody').on('mousedown', '.box', function() {
             $(this).addClass('draggable').parents().on('mousemove', function(e) {
                 $('.draggable').offset({
