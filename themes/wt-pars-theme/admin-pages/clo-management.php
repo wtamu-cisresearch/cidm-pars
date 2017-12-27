@@ -7,6 +7,10 @@
     wp_enqueue_style( 'admin-modal' );
 
     wp_enqueue_script( 'clo-management' );
+    wp_localize_script( 'clo-management', 'settings', array(
+        'root' => esc_url_raw( rest_url() ),
+        'nonce' => wp_create_nonce( 'wp_rest' )
+    ) );
 
     
     if($_GET['_page']){
@@ -20,7 +24,7 @@
 
     echo "
         <div style='padding:20px;'>
-            <button class='btn btn-primary' onclick='pop()'>Add CLO</button>
+            <button class='btn btn-primary' id='add_record'>Add CLO</button>
             <table class='table table-striped'>
                 <thead>
                     <tr>
@@ -82,7 +86,7 @@
             $tr = $tr . "<tr>
                             <td>" . $record->code . "</td>
                             <td>" . $record->description . "</td>
-                            <td><a href='#' id='myBtn' onclick='pop(" . $record->clo_id . ")'> Edit | Delete </a></td> 
+                            <td><a href='#' class='record' data-clo_id='" . $record->clo_id . "' data-code='" . $record->code . "' data-description='" . $record->description . "'> Edit || Delete </a></td> 
                         </tr>";
         }
         return $tr;

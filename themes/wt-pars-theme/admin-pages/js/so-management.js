@@ -1,98 +1,92 @@
-var modal = document.getElementById('myModal');
+(function($){
+    $(document).ready(function() {
 
-var span = document.getElementsByClassName("close")[0];
+        $(".record").on("click", function(){
 
-var _id;
+            $("#add").hide();
+            $("#update").show();
+            $("#myModal").show();
 
-function pop(record){
-    
-    modal.style.display = "block";
+            $("#so_code ").val($(this).data("code"));
+            $("#so_description").val($(this).data("description"));
 
-    // if(record){
-    //     document.getElementById('edit').style.display = "block";
-    //     document.getElementById('add').style.display = "none";
-    //     _id = record.nid11;
+            var so_id = $(this).data("so_id");
+            
+            $("#submit_form").on("submit", function(event){
+                event.preventDefault();
+                var so_code = $("#so_code ").val();
+                var so_description = $("#so_description").val();
+                $.ajax({
+                    url: settings.root + 'wt-pars-theme/v2/admin/so/' + so_id + '/' + so_code + '/' + so_description,
+                    method: 'PUT',
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                    },
+                    success: function (responce) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.info(xhr.responseText);
+                    },
+                })
+            });
 
-    //     document.getElementById("year").value = record.year;
-    //     document.getElementById("term").value = record.term;
-    //     document.getElementById("sonumber").value = record.PloNo;
-    //     document.getElementById("sodes").value = record.PloDec;
-    // }
-    // else{
-    //     document.getElementById('edit').style.display = "none";
-    //     document.getElementById('add').style.display = "block";
-    //     _id = null;
-    // }
-}
+            $("#delete").on("click", function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: settings.root + 'wt-pars-theme/v2/admin/so/' + so_id,
+                    method: 'DELETE',
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                    },
+                    success: function (responce) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.info(xhr.responseText);
+                    },
+                })
+            });
+        });
 
-function submit(){    
-    
-    var year = document.getElementById("year").value;
-    var term = document.getElementById("term").value;
-    var soNumber = document.getElementById("sonumber").value;
-    var soDes = document.getElementById("sodes").value;
+        $("#add_record").on("click", function(){
 
-    if(!_id){
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-                location.reload();
+            $("#update").hide();
+            $("#delete").hide();
+            $("#add").show();
+            $("#myModal").show();
+
+            $("#so_code ").val("");
+            $("#so_description").val("");
+            
+            $("#submit_form").on("submit", function(event){
+                event.preventDefault();
+                var so_code = $("#so_code ").val();
+                var so_description = $("#so_description").val();
+                $.ajax({
+                    url: settings.root + 'wt-pars-theme/v2/admin/so/' + so_code + '/' + so_description,
+                    method: 'POST',
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                    },
+                    success: function (responce) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.info(xhr.responseText);
+                    },
+                })
+            }); 
+        });
+
+        $(".close").on("click", function(){
+            $("#myModal").hide();
+        });
+
+        $(window).on("click", function(event){
+            if (event.target == document.getElementById("myModal")) {
+                $("#myModal").hide();
             }
-        }
-        xmlHttp.open("POST", encodeURI('http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/so/' + 
-                         year + '/' + term + '/' + soNumber + '/' + soDes), true );
-        xmlHttp.send( null );
-        modal.style.display = "none";
-        console.log(xmlHttp.responseText);
-    }
-    else{
-        console.log(encodeURI('http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/so/' + 
-        _id +  '/' + year + '/' + term + '/' + soNumber + '/' + soDes));
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-                location.reload();
-            }
-        }
-        xmlHttp.open("POST", encodeURI('http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/so/' + 
-                       _id +  '/' + year + '/' + term + '/' + soNumber + '/' + soDes), true );
-        xmlHttp.send( null );
-        modal.style.display = "none";
-        console.log(xmlHttp.responseText);
-    }
-}
-
-function discard(){    
-
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-            location.reload();
-        }
-    }
-    xmlHttp.open( "DELETE", 'http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/so/' + _id , true );
-    xmlHttp.send( null );
-    modal.style.display = "none";
-}
-
-function yaydata(data){
-    console.log(data);
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-    garbageCollector();    
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-        garbageCollector();
-    } 
-} 
-
-function garbageCollector(){
-    for(var bag in document.getElementsByClassName('garbage-collector')){
-        document.getElementsByClassName('garbage-collector')[bag].value = null;
-    }
-} 
+        });
+    });
+})(jQuery);

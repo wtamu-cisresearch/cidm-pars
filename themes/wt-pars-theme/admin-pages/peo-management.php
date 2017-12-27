@@ -7,6 +7,10 @@
     wp_enqueue_style( 'admin-modal' );
 
     wp_enqueue_script( 'peo-management' );
+    wp_localize_script( 'peo-management', 'settings', array(
+        'root' => esc_url_raw( rest_url() ),
+        'nonce' => wp_create_nonce( 'wp_rest' )
+    ) );
 
     if($_GET['_page']){
         $records = $wpdb->get_results( "SELECT * FROM pars_program_educational_objective LIMIT " . $_GET['_page'] * 10 . ", 10");
@@ -19,17 +23,14 @@
 
     echo "
         <div style='padding:20px;'>
-            <button class='btn btn-primary' onclick='pop()'>Add PEO</button>
+            <button class='btn btn-primary' id='add_record'>Add PEO</button>
             <table class='table table-striped'> 
                 <thead>
                     <tr>
-                        <th colspan='5'>Program Educational Objectives</th>
+                        <th>PEO Code</th>
+                        <th>Description</th>
+                        <th>Action</th>
                     </tr>
-                        <tr>
-                            <th>PEO Code</th>
-                            <th>Description</th>
-                            <th>Action</th>
-                        </tr>
                 </thead>
                 <tbody>
                     " . popTable($records) . "
@@ -84,7 +85,7 @@
             $tr = $tr . "<tr>
                             <td>" . $record->code . "</td>
                             <td>" . $record->description . "</td>
-                            <td><a href='#' id='myBtn' onclick='pop(" . $record->peo_id . ")'> Edit | Delete </a></td> 
+                            <td><a href='#' class='record' data-peo_id='" . $record->peo_id . "' data-code='" . $record->code . "' data-description='" . $record->description . "'> Edit || Delete </a></td> 
                         </tr>";
         }
         return $tr;

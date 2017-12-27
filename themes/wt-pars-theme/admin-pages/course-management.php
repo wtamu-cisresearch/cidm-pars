@@ -23,7 +23,7 @@
 
     echo "
         <div style='padding:20px;'>
-            <button class='btn btn-primary' id='add_course'>Add Course</button>
+            <button class='btn btn-primary' id='add_record'>Add Course</button>
             <table class='table table-striped'>
                 <thead>
                     <tr>

@@ -7,6 +7,10 @@
     wp_enqueue_style( 'admin-modal' );
 
     wp_enqueue_script( 'so-management' );
+    wp_localize_script( 'so-management', 'settings', array(
+        'root' => esc_url_raw( rest_url() ),
+        'nonce' => wp_create_nonce( 'wp_rest' )
+    ) );
 
     if($_GET['_page']){
         $records = $wpdb->get_results( "SELECT * FROM plo LIMIT " . $_GET['_page'] * 10 . ", 10");
@@ -19,7 +23,7 @@
 
     echo "
         <div style='padding:20px;'>
-            <button class='btn btn-primary' onclick='pop()'>Add SO</button>
+            <button class='btn btn-primary' id='add_record'>Add SO</button>
             <table class='table table-striped'>
                 <thead>
                     <tr>
@@ -80,7 +84,7 @@
             $tr = $tr . "<tr>
                             <td>" . $record->code . "</td>
                             <td>" . $record->description . "</td>
-                            <td><a href='#' id='myBtn' onclick='pop(" . $record->so_id . ")'> Edit | Delete </a></td> 
+                            <td><a href='#' class='record' data-so_id='" . $record->so_id . "' data-code='" . $record->code . "' data-description='" . $record->description . "'> Edit || Delete </a></td> 
                         </tr>";
         }
         return $tr;

@@ -19,7 +19,7 @@
                 var course_name = $("#course_name").val();
                 var course_description = $("#course_description").val();
                 $.ajax({
-                    url: settings.root + 'wt-pars-theme/v2/course/' + course_id + '/' + course_code + '/' + course_name + '/' + course_description,
+                    url: settings.root + 'wt-pars-theme/v2/admin/course/' + course_id + '/' + course_code + '/' + course_name + '/' + course_description,
                     method: 'PUT',
                     beforeSend: function(xhr){
                         xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
@@ -36,7 +36,7 @@
             $("#delete").on("click", function(event){
                 event.preventDefault();
                 $.ajax({
-                    url: settings.root + 'wt-pars-theme/v2/course/' + course_id ,
+                    url: settings.root + 'wt-pars-theme/v2/admin/course/' + course_id ,
                     method: 'DELETE',
                     beforeSend: function(xhr){
                         xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
@@ -51,7 +51,7 @@
             });
         });
 
-        $("#add_course").on("click", function(){
+        $("#add_record").on("click", function(){
 
             $("#update").hide();
             $("#delete").hide();
@@ -68,7 +68,7 @@
                 var course_name = $("#course_name").val();
                 var course_description = $("#course_description").val();
                 $.ajax({
-                    url: settings.root + 'wt-pars-theme/v2/course/' + course_code + '/' + course_name + '/' + course_description,
+                    url: settings.root + 'wt-pars-theme/v2/admin/course/' + course_code + '/' + course_name + '/' + course_description,
                     method: 'POST',
                     beforeSend: function(xhr){
                         xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
@@ -84,13 +84,11 @@
         });
 
         $(".close").on("click", function(){
-            $("#measuresHook").text('');
             $("#myModal").hide();
         });
 
         $(window).on("click", function(event){
             if (event.target == document.getElementById("myModal")) {
-                $("#measuresHook").text('');
                 $("#myModal").hide();
             }
         });

@@ -16,19 +16,64 @@
             'callback' => 'get_programEducationalObjective',
             'permission_callback' => 'check_levelTwo',
         ) );
-        register_rest_route( 'wt-pars-theme/v2', '/course/(?P<course_id>\d+)/(?P<code>.+)/(?P<name>.+)/(?P<description>.+)', array(
+        register_rest_route( 'wt-pars-theme/v2', '/admin/course/(?P<course_id>\d+)/(?P<code>.+)/(?P<name>.+)/(?P<description>.+)', array(
             'methods' => 'PUT',
             'callback' => 'put_course',
             'permission_callback' => 'check_levelOne',
         ) );
-        register_rest_route( 'wt-pars-theme/v2', '/course/(?P<code>.+)/(?P<name>.+)/(?P<description>.+)', array(
+        register_rest_route( 'wt-pars-theme/v2', '/admin/course/(?P<code>.+)/(?P<name>.+)/(?P<description>.+)', array(
             'methods' => 'POST',
             'callback' => 'post_course',
             'permission_callback' => 'check_levelOne',
         ) );
-        register_rest_route( 'wt-pars-theme/v2', '/course/(?P<course_id>\d+)', array(
+        register_rest_route( 'wt-pars-theme/v2', '/admin/course/(?P<course_id>\d+)', array(
             'methods' => 'DELETE',
             'callback' => 'delete_course',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/clo/(?P<clo_id>\d+)/(?P<code>.+)/(?P<description>.+)', array(
+            'methods' => 'PUT',
+            'callback' => 'put_clo',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/clo/(?P<code>.+)/(?P<description>.+)', array(
+            'methods' => 'POST',
+            'callback' => 'post_clo',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/clo/(?P<clo_id>\d+)', array(
+            'methods' => 'DELETE',
+            'callback' => 'delete_clo',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/peo/(?P<peo_id>\d+)/(?P<code>.+)/(?P<description>.+)', array(
+            'methods' => 'PUT',
+            'callback' => 'put_peo',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/peo/(?P<code>.+)/(?P<description>.+)', array(
+            'methods' => 'POST',
+            'callback' => 'post_peo',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/peo/(?P<peo_id>\d+)', array(
+            'methods' => 'DELETE',
+            'callback' => 'delete_peo',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/so/(?P<so_id>\d+)/(?P<code>.+)/(?P<description>.+)', array(
+            'methods' => 'PUT',
+            'callback' => 'put_so',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/so/(?P<code>.+)/(?P<description>.+)', array(
+            'methods' => 'POST',
+            'callback' => 'post_so',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/so/(?P<so_id>\d+)', array(
+            'methods' => 'DELETE',
+            'callback' => 'delete_so',
             'permission_callback' => 'check_levelOne',
         ) );
     } );
@@ -269,6 +314,111 @@
     function delete_course( $data ) {
         global $wpdb;
         $wpdb->delete( 'pars_course', array( 'course_id'=>$data['course_id']) );  
+    
+        return true;
+    }
+
+    function put_clo( $data ){
+        global $wpdb;
+        $clo_code = urldecode($data['code']);
+        $clo_description = urldecode($data['description']);
+        $wpdb->update('pars_course_learning_outcome',
+                        array(
+                            'code'=>$clo_code,
+                            'description'=>$clo_description
+                        ),
+                        array( 'clo_id'=>$data['clo_id'] )
+                    ); 
+        return true;
+    }
+
+    function post_clo( $data ) {
+        global $wpdb;
+        $clo_code = urldecode($data['code']);
+        $clo_description = urldecode($data['description']);
+        $wpdb->insert('pars_course_learning_outcome',
+                array(
+                    'code'=>$clo_code,
+                    'description'=>$clo_description
+                    )
+                );    
+    
+        return true;
+    }
+
+    function delete_clo( $data ) {
+        global $wpdb;
+        $wpdb->delete( 'pars_course_learning_outcome', array( 'clo_id'=>$data['clo_id']) );  
+    
+        return true;
+    }
+
+    function put_peo( $data ){
+        global $wpdb;
+        $peo_code = urldecode($data['code']);
+        $peo_description = urldecode($data['description']);
+        $wpdb->update('pars_program_educational_objective',
+                        array(
+                            'code'=>$peo_code,
+                            'description'=>$peo_description
+                        ),
+                        array( 'peo_id'=>$data['peo_id'] )
+                    ); 
+        return true;
+    }
+
+    function post_peo( $data ) {
+        global $wpdb;
+        $peo_code = urldecode($data['code']);
+        $peo_description = urldecode($data['description']);
+        $wpdb->insert('pars_program_educational_objective',
+                array(
+                    'code'=>$peo_code,
+                    'description'=>$peo_description
+                    )
+                );    
+    
+        return true;
+    }
+
+    function delete_peo( $data ) {
+        global $wpdb;
+        $wpdb->delete( 'pars_program_educational_objective', array( 'peo_id'=>$data['peo_id']) );  
+    
+        return true;
+    }
+
+    function put_so( $data ){
+        global $wpdb;
+        $so_code = urldecode($data['code']);
+        $so_description = urldecode($data['description']);
+        $wpdb->update('pars_student_outcome',
+                        array(
+                            'code'=>$so_code,
+                            'description'=>$so_description
+                        ),
+                        array( 'so_id'=>$data['so_id'] )
+                    ); 
+        return true;
+    }
+
+    function post_so( $data ) {
+        global $wpdb;
+        $so_code = urldecode($data['code']);
+        $so_description = urldecode($data['description']);
+        $wpdb->insert('pars_student_outcome',
+                array(
+                    'code'=>$so_code,
+                    'description'=>$so_description
+                    )
+                );    
+    
+        return true;
+    }
+
+    function delete_so( $data ) {
+        global $wpdb;
+        $wpdb->delete( 'pars_student_outcome', array( 'so_id'=>$data['so_id']) );  
     
         return true;
     }
