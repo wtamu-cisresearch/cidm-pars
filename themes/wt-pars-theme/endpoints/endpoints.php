@@ -121,7 +121,7 @@
                                         pars_course.code AS course_code,
                                         pars_course.description AS course_description,
                                         pars_section.instructor,
-                                        pars_section.section,
+                                        pars_section.number,
                                         pars_section.term,
                                         pars_section.year,
                                         pars_section.modification,
@@ -165,6 +165,8 @@
         global $wpdb;
         $data = $wpdb->get_results("SELECT
                                         pars_course_learning_outcome.code AS clo_code,
+                                        pars_course.code AS course_code,
+                                        pars_section.number section_number,
                                         pars_course_learning_outcome.description clo_description,
                                         pars_course.code course_code,
                                         ROUND(

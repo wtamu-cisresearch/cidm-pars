@@ -21,6 +21,8 @@
                         var tr = document.createElement('tr');
                         $("#measuresHook").append(tr);
                         tr.appendChild(document.createElement('td')).innerText = data[d].clo_code + ' ' + data[d].clo_description;
+                        tr.appendChild(document.createElement('td')).innerText = data[d].course_code;
+                        tr.appendChild(document.createElement('td')).innerText = data[d].section_number;
                         tr.appendChild(document.createElement('td')).innerText = data[d].exemplary + '%';
                         tr.appendChild(document.createElement('td')).innerText = data[d].satisfactory + '%';
                         tr.appendChild(document.createElement('td')).innerText = data[d].unsatisfactory + '%';

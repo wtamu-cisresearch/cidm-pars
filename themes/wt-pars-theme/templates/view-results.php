@@ -24,7 +24,7 @@
         $records = $wpdb->get_results( "SELECT
                                             pars_section.section_id,
                                             pars_course.code AS course,
-                                            pars_section.section AS section,
+                                            pars_section.number,
                                             pars_section.year AS year,
                                             pars_section.term AS term
                                         FROM
@@ -34,14 +34,14 @@
                                             pars_section.course_id = pars_course.course_id AND pars_section.year = '" . $output['y'] . "' AND pars_section.term = '" . $output['t'] .  "'
                                         ORDER BY
                                             course,
-                                            section" );
+                                            number" );
     }
     else{
         $default = '2010 Spring';
         $records = $wpdb->get_results( "SELECT
                                             pars_section.section_id,
                                             pars_course.code AS course,
-                                            pars_section.section AS section,
+                                            pars_section.number,
                                             pars_section.year AS year,
                                             pars_section.term AS term
                                         FROM
@@ -51,7 +51,7 @@
                                             pars_section.course_id = pars_course.course_id AND pars_section.year = 2010 AND pars_section.term = 'Spring'
                                         ORDER BY
                                             course,
-                                            section" );
+                                            number" );
     }
 
     echo "<form action='' method='get'>
@@ -89,7 +89,7 @@
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
                             <td><a href='#' class='record' data-section_id='" . $record->section_id . "'>" . $record->course . "</a></td>
-                            <td>" . $record->section . "</td>
+                            <td>" . $record->number . "</td>
                             <td>" . $record->year . "</td>
                             <td>" . $record->term . "</td> 
                         </tr>";
