@@ -8,6 +8,7 @@
             var peo_id = $(this).data("peo_id");
             var year = $(this).data("year");
             var term = $(this).data("term");
+            console.info(peo_id);
 
             $.ajax({
                 url: settings.root + 'wt-pars-theme/v2/programeducationalobjective/' + peo_id + '/' + year + '/' + term,
