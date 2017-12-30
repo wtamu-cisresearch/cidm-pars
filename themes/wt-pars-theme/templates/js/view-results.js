@@ -33,7 +33,7 @@
                     var tracker = [];
 
                     for (var d in data) {
-                        if(!tracker.includes(data[d].clo_description)){
+                        if(!tracker.includes(data[d].so_description + data[d].clo_description)){
                             var tr = document.createElement('tr');
                             $("#mappingHook").append(tr);
                             var so = data[d].so_code + ' - ' + data[d].so_description;
@@ -41,7 +41,7 @@
                             tr.appendChild(document.createElement('td')).innerText = so;
                             tr.appendChild(document.createElement('td')).innerText = clo;
                         }
-                        tracker.push(data[d].clo_description);
+                        tracker.push(data[d].so_description + data[d].clo_description);
                     }
 
                     for (var d in data) {
