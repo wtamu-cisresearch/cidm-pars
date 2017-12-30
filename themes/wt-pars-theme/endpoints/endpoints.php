@@ -154,7 +154,8 @@
                                         pars_beta,
                                         pars_student_outcome
                                     WHERE
-                                        pars_section.course_id = pars_course.course_id AND pars_section.section_id = " . $data['id']. " AND pars_alpha.section_id = pars_section.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_beta.alpha_id = pars_alpha.alpha_id AND pars_beta.so_id = pars_student_outcome.so_id");  
+                                        pars_section.course_id = pars_course.course_id AND pars_section.section_id = " . $data['id']. " AND pars_alpha.section_id = pars_section.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_beta.alpha_id = pars_alpha.alpha_id AND pars_beta.so_id = pars_student_outcome.so_id
+                                    ORDER BY so_code");  
                                     
 
         

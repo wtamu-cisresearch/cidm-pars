@@ -15,7 +15,7 @@ Entity Relational Digram
 
 > **Design Idea:** The admin will have a window in the dashboard in which he will create a new section, and add all of the course learning outcomes that go with it. The admin will then go to another window in which he will see all of the course learning outcomes that he has assigned to sections and map them with the appropiate student outcomes and program learning objectives. The instructors will then be able to view the new sections assigned to them, modify the section table and add records to the measure table. 
 
-![Alt text](_erd.jpeg?raw=true "ERD")
+![Alt text](erd.jpeg?raw=true "ERD")
 
 ```sql
 /*pars_course*/ 
@@ -38,12 +38,24 @@ SELECT peo AS CODE, peo_description AS description FROM program_educational_obje
 SELECT Y.alpha_id, z.peo_id, Y.so_id FROM ( SELECT DISTINCT pars_alpha.alpha_id, pars_student_outcome.so_id, plo.nid11 FROM clo_measures, clo, pars_section, pars_course, pars_course_learning_outcome, ploclomap, pars_alpha, plo, pars_student_outcome WHERE clo_measures.CloNo = clo.CloNo AND pars_section.course_id = pars_course.course_id AND clo.course = pars_course.code AND pars_section.number = clo.section AND clo.term = pars_section.term AND clo.year = pars_section.year AND clo.CloDec = pars_course_learning_outcome.description AND clo.CloNo = ploclomap.CloNo AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id AND pars_alpha.section_id = pars_section.section_id AND ploclomap.PloNo = plo.nid11 AND plo.PloDec = pars_student_outcome.description ) AS Y, ( SELECT pars_program_educational_objective.peo_id, plopeomap.plo FROM program_education_objective, plopeomap, pars_program_educational_objective WHERE program_education_objective.nid = plopeomap.peo AND pars_program_educational_objective.description = program_education_objective.peo_description GROUP BY plopeomap.plo ) AS z WHERE Y.nid11 = z.plo
 /*Deleting extra records in pars_section*/
 DELETE FROM pars_section WHERE pars_section.section_id = 69 OR pars_section.section_id = 76 
-/*test alpha*/ 
-SELECT pars_course.code, pars_section.number, pars_section.year, pars_section.term, pars_course_learning_outcome.code, pars_course_learning_outcome.description FROM pars_course, pars_section, pars_alpha, pars_course_learning_outcome WHERE pars_section.course_id = pars_course.course_id AND pars_section.year = 2015 AND pars_section.term = "Spring" AND pars_course.code = "CIDM 1315" AND pars_section.number = 1 AND pars_section.section_id = pars_alpha.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id  
-/*test beta*/ 
-SELECT pars_course.code, pars_section.number, pars_section.year, pars_student_outcome.code, pars_student_outcome.description, pars_section.term, pars_course_learning_outcome.code, pars_course_learning_outcome.description FROM pars_course, pars_section, pars_alpha, pars_course_learning_outcome, pars_beta, pars_student_outcome WHERE pars_section.course_id = pars_course.course_id AND pars_section.year = 2016 AND pars_section.term = "Spring" AND pars_course.code = "CIDM 4390" AND pars_section.number = 1 AND pars_section.section_id = pars_alpha.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id AND pars_beta.alpha_id = pars_alpha.alpha_id AND pars_beta.so_id = pars_student_outcome.so_id GROUP BY pars_course_learning_outcome.code 
-/*test measure*/
-SELECT pars_course.code, pars_section.number, pars_section.year, pars_section.term, pars_course_learning_outcome.code, pars_course_learning_outcome.description, pars_measure.type, pars_measure.exemplary, pars_measure.satisfactory, pars_measure.unsatisfactory FROM pars_course, pars_section, pars_alpha, pars_course_learning_outcome, pars_measure WHERE pars_section.course_id = pars_course.course_id AND pars_section.year = 2011 AND pars_section.term = "Fall" AND pars_course.code = "CIDM 2342" AND pars_section.number = 1 AND pars_section.section_id = pars_alpha.section_id AND pars_alpha.clo_id = pars_course_learning_outcome.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id
+/*Insert missing records in pars_section, pars_alpha, pars_measure, pars_beta*/
+INSERT INTO pars_section (course_id, instructor_id, instructor, number, term, year, modification, feedback, reflection, proposed_action)  VALUES (2, NULL, "	Dr. Jeffry Babb", 1, "Spring", 2010, "A final group project was introduced as a means of trying CIDM 1315 and CIDM2315.", "Overall, Students did worse than they did in CIDM 1315 by about a letter grade. At the midterm, the feedback related to a disconnect between quiz questions and lecture and what was on their test. Some students sought help throughout the semester, but others were scarce. Some students did engage in their learning process by working with me to create code these are students who excelled. In general the semester was not a good experience for many of the srudents and the expectations difference between CIDM1315 and CIDM2315 adversely affected many of these students.", "I was, on the whole quite unhappy with this class this semester. I have taught this class or variant for all 9 years of my academic career and i have never experienced this degree of coordination and unwillingness to work hard in any group. While I will spend considerable time this summer looking for what I can do to improve the critical CIDM experience, I think the degree of coordination and expectation management between the programming course is key. As we, as a faculty, have plans for a revitalization and ravamp of the programming sequence, I am certain this will work out.", "For next semester, I propose using the Processing using library for java in a graphical context. It is my feeling that this graphical context will improve engagement and learning.")
+INSERT INTO pars_alpha (clo_id, section_id) VALUES (163, 103)
+INSERT INTO pars_alpha (clo_id, section_id) VALUES (167, 103)
+INSERT INTO pars_alpha (clo_id, section_id) VALUES (160, 103)
+INSERT INTO pars_alpha (clo_id, section_id) VALUES (190, 103)
+INSERT INTO pars_measure (alpha_id, type, exemplary, good, satisfactory, poor, unsatisfactory, comment) VALUES (564, "Assignment", 6, 0, 2, 0, 0, 'Assignment Three, Problems 5.30 and 5.31 from Deitel and Deitel "Java: How to progra Late Objects Version", 8th ed.')
+INSERT INTO pars_measure (alpha_id, type, exemplary, good, satisfactory, poor, unsatisfactory, comment) VALUES (565, "Assignment", 7, 0, 2, 0, 0, 'Assignment Three, Problems 5.30 and 5.31 from Deitel and Deitel "Java: How to progra Late Objects Version", 8th ed.')
+INSERT INTO pars_measure (alpha_id, type, exemplary, good, satisfactory, poor, unsatisfactory, comment) VALUES (566, "Assignment", 0, 0, 13, 0, 14, 'Assignment Two, Problems 3.31 from Deitel and Deitel "Java: How to progra Late Objects Version", 8th ed.')
+INSERT INTO pars_measure (alpha_id, type, exemplary, good, satisfactory, poor, unsatisfactory, comment) VALUES (567, "Assignment", 7, 0, 1, 0, 7, 'Assignment Six, Problems 14.7 from Deitel and Deitel "Java: How to progra Late Objects Version", 8th ed.')
+INSERT INTO pars_beta (alpha_id, peo_id, so_id) VALUES (564, 4, 1)
+INSERT INTO pars_beta (alpha_id, peo_id, so_id) VALUES (565, 4, 1)
+INSERT INTO pars_beta (alpha_id, peo_id, so_id) VALUES (566, 4, 5)
+INSERT INTO pars_beta (alpha_id, peo_id, so_id) VALUES (567, 4, 7)
+/*Fixing an issue in beta*/
+UPDATE pars_beta SET pars_beta.so_id = 7 WHERE pars_beta.alpha_id = 1
+UPDATE pars_beta SET pars_beta.so_id = 3 WHERE pars_beta.alpha_id = 5
+UPDATE pars_beta SET pars_beta.so_id = 3 WHERE pars_beta.alpha_id = 3
 ```
 
 ----------

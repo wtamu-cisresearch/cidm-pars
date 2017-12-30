@@ -8,6 +8,7 @@
             var so_id = $(this).data("so_id");
             var year = $(this).data("year");
             var term = $(this).data("term");
+            console.info(so_id);
 
             $.ajax({
                 url: settings.root + 'wt-pars-theme/v2/studentoutcomes/' + so_id + '/' + year + '/' + term,
