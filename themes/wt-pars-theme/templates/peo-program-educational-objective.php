@@ -177,7 +177,7 @@
         }
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
-                            <td><a href='#' class='record' data-peo_id='" . $record->peo_id . "' data-year='" . $year . "' data-term='" . $term . "'>" . $record->peonumber . " - " . $record->peodes . "</td>
+                            <td><a href='#' class='peo-record' data-peo_id='" . $record->peo_id . "' data-year='" . $year . "' data-term='" . $term . "'>" . $record->peonumber . " - " . $record->peodes . "</td>
                             <td>" . $record->exemplary . "%</td>
                             <td>" . $record->satisfactory . "%</td>
                             <td>" . $record->unsatisfactory . "%</td>

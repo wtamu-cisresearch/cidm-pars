@@ -24,8 +24,8 @@
         $default = $p['y'] . ' ' . $p['t'];
         $records = $wpdb->get_results( " SELECT
                                             pars_student_outcome.so_id,
-                                            pars_student_outcome.code AS sonumber,
-                                            pars_student_outcome.description AS sodes,
+                                            pars_student_outcome.code,
+                                            pars_student_outcome.description,
                                             ROUND(
                                                 (
                                                     SUM(pars_measure.exemplary) /(
@@ -82,8 +82,8 @@
          $default = '2010 Spring';
          $records = $wpdb->get_results( "SELECT
                                             pars_student_outcome.so_id,
-                                            pars_student_outcome.code AS sonumber,
-                                            pars_student_outcome.description AS sodes,
+                                            pars_student_outcome.code,
+                                            pars_student_outcome.description,
                                             ROUND(
                                                 (
                                                     SUM(pars_measure.exemplary) /(
@@ -175,11 +175,11 @@
         }
         else{
             $year = '2010';
-            $term = 'Fall';
+            $term = 'Spring';
         }
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
-                            <td><a href='#' class='record' data-so_id='" . $record->so_id . "' data-year='" . $year . "' data-term='" . $term . "'>" . $record->sonumber . " - " . $record->sodes . "</td>
+                            <td><a href='#' class='so-record' data-so_id='" . $record->so_id . "' data-year='" . $year . "' data-term='" . $term . "'>" . $record->code . " - " . $record->description . "</td>
                             <td>" . $record->exemplary . "%</td>
                             <td>" . $record->satisfactory . "%</td>
                             <td>" . $record->unsatisfactory . "%</td>

@@ -38,3 +38,14 @@
     text-decoration: none;
     cursor: pointer;
 }
+
+.content-holder{
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#go-back{
+    text-align: left;
+    padding-top: 10px;   
+    padding-bottom: 10px; 
+}

@@ -6,14 +6,19 @@
             'callback' => 'get_viewresults',
             'permission_callback' => 'check_levelTwo',
         ) );
-        register_rest_route( 'wt-pars-theme/v2', '/studentoutcomes/(?P<so_id>\d+)/(?P<year>\d+)/(?P<term>\w+)', array(
+        register_rest_route( 'wt-pars-theme/v2', '/template/clo/(?P<so_id>\d+)/(?P<year>\d+)/(?P<term>\w+)', array(
             'methods' => 'GET',
-            'callback' => 'get_studentOutcomes',
+            'callback' => 'get_clo',
             'permission_callback' => 'check_levelTwo',
         ) );
         register_rest_route( 'wt-pars-theme/v2', '/programeducationalobjective/(?P<peo_id>\d+)/(?P<year>\d+)/(?P<term>\w+)', array(
             'methods' => 'GET',
             'callback' => 'get_programEducationalObjective',
+            'permission_callback' => 'check_levelTwo',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/template/measure/(?P<clo_id>\d+)/(?P<year>\d+)/(?P<term>\w+)', array(
+            'methods' => 'GET',
+            'callback' => 'get_measure',
             'permission_callback' => 'check_levelTwo',
         ) );
         register_rest_route( 'wt-pars-theme/v2', '/admin/course/(?P<course_id>\d+)/(?P<code>.+)/(?P<name>.+)/(?P<description>.+)', array(
@@ -162,9 +167,11 @@
         return $data;
     }
 
-    function get_studentOutcomes( $data ) {
+    function get_clo( $data ) {
         global $wpdb;
         $data = $wpdb->get_results("SELECT
+                                        CONCAT(pars_course_learning_outcome.code, pars_course_learning_outcome.description, pars_course.code, pars_section.number) AS Groupie,
+                                        pars_course_learning_outcome.clo_id,
                                         pars_course_learning_outcome.code AS clo_code,
                                         pars_course.code AS course_code,
                                         pars_section.number section_number,
@@ -172,40 +179,40 @@
                                         pars_course.code course_code,
                                         ROUND(
                                             (
-                                                pars_measure.exemplary /(
-                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                SUM(pars_measure.exemplary) /(
+                                                    SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                 ) * 100
                                             ),
                                             2
                                         ) AS exemplary,
                                         ROUND(
                                             (
-                                                pars_measure.good /(
-                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                SUM(pars_measure.good) /(
+                                                    SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                 ) * 100
                                             ),
                                             2
                                         ) AS good,
                                         ROUND(
                                             (
-                                                pars_measure.satisfactory /(
-                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                SUM(pars_measure.satisfactory) /(
+                                                    SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                 ) * 100
                                             ),
                                             2
                                         ) AS satisfactory,
                                         ROUND(
                                             (
-                                                pars_measure.poor /(
-                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                SUM(pars_measure.poor) /(
+                                                    SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                 ) * 100
                                             ),
                                             2
                                         ) AS poor,
                                         ROUND(
                                             (
-                                                pars_measure.unsatisfactory /(
-                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                SUM(pars_measure.unsatisfactory) /(
+                                                    SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
                                                 ) * 100
                                             ),
                                             2
@@ -218,7 +225,11 @@
                                         pars_measure,
                                         pars_beta
                                     WHERE
-                                        pars_section.course_id = pars_course.course_id AND pars_alpha.section_id = pars_section.section_id AND pars_course_learning_outcome.clo_id = pars_alpha.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_beta.alpha_id = pars_alpha.alpha_id AND pars_section.term = '" . $data['term']. "' AND pars_section.year = " . $data['year']. " AND pars_beta.so_id = " . $data['so_id']. "");
+                                        pars_section.course_id = pars_course.course_id AND pars_alpha.section_id = pars_section.section_id AND pars_course_learning_outcome.clo_id = pars_alpha.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_beta.alpha_id = pars_alpha.alpha_id AND pars_section.term = '" . $data['term']. "' AND pars_section.year = " . $data['year']. " AND pars_beta.so_id = " . $data['so_id']. "
+                                    GROUP BY 
+                                        Groupie
+                                    ORDER BY 
+                                        pars_course.code, pars_section.number");
                                     
         return $data;
     }
@@ -227,8 +238,8 @@
         global $wpdb;
         $data = $wpdb->get_results("SELECT
                                         pars_student_outcome.so_id,
-                                        pars_student_outcome.code AS sonumber,
-                                        pars_student_outcome.description AS sodes,
+                                        pars_student_outcome.code AS so_code,
+                                        pars_student_outcome.description AS so_description,
                                         ROUND(
                                             (
                                                 SUM(pars_measure.exemplary) /(
@@ -426,4 +437,60 @@
         return true;
     }
 
+    function get_measure( $data ){
+        global $wpdb;
+        $data = $wpdb->get_results("SELECT
+                                        pars_measure.type,
+                                        pars_measure.comment,
+                                        ROUND(
+                                            (
+                                                pars_measure.exemplary /(
+                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                ) * 100
+                                            ),
+                                            2
+                                        ) AS exemplary,
+                                        ROUND(
+                                            (
+                                                pars_measure.good /(
+                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                ) * 100
+                                            ),
+                                            2
+                                        ) AS good,
+                                        ROUND(
+                                            (
+                                                pars_measure.satisfactory /(
+                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                ) * 100
+                                            ),
+                                            2
+                                        ) AS satisfactory,
+                                        ROUND(
+                                            (
+                                                pars_measure.poor /(
+                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                ) * 100
+                                            ),
+                                            2
+                                        ) AS poor,
+                                        ROUND(
+                                            (
+                                                pars_measure.unsatisfactory /(
+                                                    pars_measure.exemplary + pars_measure.good + pars_measure.satisfactory + pars_measure.poor + pars_measure.unsatisfactory
+                                                ) * 100
+                                            ),
+                                            2
+                                        ) AS unsatisfactory
+                                    FROM
+                                        pars_section,
+                                        pars_course,
+                                        pars_course_learning_outcome,
+                                        pars_alpha,
+                                        pars_measure
+                                    WHERE
+                                        pars_section.course_id = pars_course.course_id AND pars_alpha.section_id = pars_section.section_id AND pars_course_learning_outcome.clo_id = pars_alpha.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_section.term = '" . $data['term']. "' AND pars_section.year = '" . $data['year']. "' AND pars_alpha.clo_id = " . $data['clo_id']. "");
+        return $data;
+    }
+                                
 ?>
