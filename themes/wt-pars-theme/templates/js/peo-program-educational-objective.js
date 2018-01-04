@@ -4,8 +4,8 @@
         $(".peo-record").on("click", function(){
 
             $("#measuresHook").text('');
-            $(".sunlight").show();
             $(".undercover").hide();
+            $(".sunlight").show();
             $("#myModal").show();
             var copycat = document.getElementById("copycat");
             copycat.dataset.peo_id = $(this).data("peo_id");
@@ -44,11 +44,16 @@
                 },
                 complete: function(){
                     $(".so-record").on("click", function(){
+                        var copydog = document.getElementById("copydog");
+                        copydog.dataset.so_id = $(this).data("so_id");
+                        copydog.dataset.year = year;
+                        copydog.dataset.term = term;
                         var so_id = $(this).data("so_id");
                         console.info(so_id);
                         console.info(year);
                         console.info(term);
-                        $(".sunlight").toggle();
+                        $(".undercover").hide();
+                        $(".moonlight").show();
                         $("#measuresHook").text("");
                         $.ajax({
                             url: settings.root + 'wt-pars-theme/v2/template/clo/' + so_id + '/' + year + '/' + term,
@@ -82,7 +87,8 @@
                                     console.info(clo_id);
                                     console.info(year);
                                     console.info(term);
-                                    $(".moonlight").toggle();
+                                    $(".undercover").hide();
+                                    $(".starlight").show();
                                     $("#measuresHook").text("");
                                        
                                     $.ajax({
@@ -124,16 +130,16 @@
 
         $(".close").on("click", function(){
             $("#measuresHook").text('');
-            $(".sunlight").show();
             $(".undercover").hide();
+            $(".sunlight").show();
             $("#myModal").hide();
         });
 
         $(window).on("click", function(event){
             if (event.target == document.getElementById("myModal")) {
                 $("#measuresHook").text('');
-                $(".sunlight").show();
                 $(".undercover").hide();
+                $(".sunlight").show();
                 $("#myModal").hide();
             }
         });

@@ -4,8 +4,8 @@
         $(".so-record").on("click", function(){
 
             $("#measuresHook").text('');
-            $(".sunlight").show();
             $(".undercover").hide();
+            $(".sunlight").show();
             $("#myModal").show();
             var copycat = document.getElementById("copycat");
             copycat.dataset.so_id = $(this).data("so_id");
@@ -48,7 +48,8 @@
                         console.info(clo_id);
                         console.info(year);
                         console.info(term);
-                        $(".sunlight").toggle();
+                        $(".undercover").hide();
+                        $(".moonlight").show();
                         $("#measuresHook").text("");
                            
                         $.ajax({
@@ -83,16 +84,16 @@
 
         $(".close").on("click", function(){
             $("#measuresHook").text('');
-            $(".sunlight").show();
             $(".undercover").hide();
+            $(".sunlight").show();
             $("#myModal").hide();
         });
 
         $(window).on("click", function(event){
             if (event.target == document.getElementById("myModal")) {
                 $("#measuresHook").text('');
-                $(".sunlight").show();
                 $(".undercover").hide();
+                $(".sunlight").show();
                 $("#myModal").hide();
             }
         });
