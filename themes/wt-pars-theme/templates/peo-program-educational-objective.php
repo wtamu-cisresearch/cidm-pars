@@ -24,8 +24,8 @@
         $default = $p['y'] . ' ' . $p['t'];
         $records = $wpdb->get_results( "SELECT
                                             pars_program_educational_objective.peo_id,
-                                            pars_program_educational_objective.code AS peonumber,
-                                            pars_program_educational_objective.description peodes,
+                                            pars_program_educational_objective.code AS peo_code,
+                                            pars_program_educational_objective.description peo_description,
                                             ROUND(
                                                 (
                                                     SUM(pars_measure.exemplary) /(
@@ -81,8 +81,8 @@
          $default = '2010 Spring';
          $records = $wpdb->get_results( "SELECT
                                             pars_program_educational_objective.peo_id,
-                                            pars_program_educational_objective.code AS peonumber,
-                                            pars_program_educational_objective.description peodes,
+                                            pars_program_educational_objective.code AS peo_code,
+                                            pars_program_educational_objective.description peo_description,
                                             ROUND(
                                                 (
                                                     SUM(pars_measure.exemplary) /(
@@ -177,7 +177,7 @@
         }
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
-                            <td><a href='#' class='peo-record' data-peo_id='" . $record->peo_id . "' data-year='" . $year . "' data-term='" . $term . "'>" . $record->peonumber . " - " . $record->peodes . "</td>
+                            <td><a href='#' class='peo-record' data-peo_id='" . $record->peo_id . "' data-year='" . $year . "' data-term='" . $term . "'>" . $record->peo_code . " - " . $record->peo_description . "</td>
                             <td>" . $record->exemplary . "%</td>
                             <td>" . $record->satisfactory . "%</td>
                             <td>" . $record->unsatisfactory . "%</td>
