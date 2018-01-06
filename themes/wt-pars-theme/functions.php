@@ -4,7 +4,7 @@
 
     wp_register_style( 'modal', get_stylesheet_directory_uri().'/css/modal.css' );
     wp_register_style( 'admin-modal', get_stylesheet_directory_uri().'/css/admin-modal.css' );
-    wp_register_style( 'mapping', get_stylesheet_directory_uri().'/css/mapping.css' );   
+    wp_register_style( 'mapping-canvas', get_stylesheet_directory_uri().'/css/mapping-canvas.css' );   
 
     // bootstrap
     wp_register_script( 'bootstrap', get_stylesheet_directory_uri().'/bootstrap-4.0.0-beta.2-dist/js/bootstrap.js' );
@@ -17,7 +17,8 @@
     wp_register_script( 'clo-management', get_stylesheet_directory_uri().'/admin-pages/js/clo-management.js' );
     wp_register_script( 'peo-management', get_stylesheet_directory_uri().'/admin-pages/js/peo-management.js' );
     wp_register_script( 'so-management', get_stylesheet_directory_uri().'/admin-pages/js/so-management.js' );
-    wp_register_script( 'mapping', get_stylesheet_directory_uri().'/admin-pages/js/mapping.js' );
+    wp_register_script( 'mapping-canvas', get_stylesheet_directory_uri().'/admin-pages/js/mapping-canvas.js' );
+    wp_register_script( 'section-management', get_stylesheet_directory_uri().'/admin-pages/js/section-management.js' );
 
     // For templates
     wp_register_script( 'view-results', get_stylesheet_directory_uri().'/templates/js/view-results.js' );
@@ -29,16 +30,16 @@
     
     function adminPages() {
 
-        add_menu_page('PARS Management', 'PARS Management', 'manage_options', 'pars-management', 'parsManagement', '', 26);
-        add_submenu_page('pars-management', 'Course Management', 'Course Management', 'manage_options', 'course-management', 'courseManagement');
-        add_submenu_page('pars-management', 'CLO Management', 'CLO Management', 'manage_options', 'clo-management', 'cloManagement');
-        add_submenu_page('pars-management', 'PEO Management', 'PEO Management', 'manage_options', 'peo-management', 'peoManagement');
-        add_submenu_page('pars-management', 'SO Management', 'SO Management', 'manage_options', 'so-management', 'soManagement');
-        add_submenu_page('pars-management', 'Mapping', 'Mapping', 'manage_options', 'mapping', 'mapping');
-        
+        add_menu_page('PARS', 'PARS', 'manage_options', 'pars', 'parsMain', '', 26);
+        add_submenu_page('pars', 'Section Management', 'Section Management', 'manage_options', 'section-management', 'sectionManagement');
+        add_submenu_page('pars', 'Mapping Canvas', 'Mapping Canvas', 'manage_options', 'mapping-canvas', 'mappingCanvas');
+        add_submenu_page('pars', 'Course Management', 'Course Management', 'manage_options', 'course-management', 'courseManagement');
+        add_submenu_page('pars', 'CLO Management', 'CLO Management', 'manage_options', 'clo-management', 'cloManagement');
+        add_submenu_page('pars', 'SO Management', 'SO Management', 'manage_options', 'so-management', 'soManagement');
+        add_submenu_page('pars', 'PEO Management', 'PEO Management', 'manage_options', 'peo-management', 'peoManagement');        
     }
 
-    function parsManagement(){
+    function parsMain(){
         include get_stylesheet_directory().'\admin-pages\pars-management.php';
     }
 
@@ -58,7 +59,48 @@
         include get_stylesheet_directory().'\admin-pages\so-management.php';
     }
 
-    function mapping(){
-        include get_stylesheet_directory().'\admin-pages\mapping.php';
+    function mappingCanvas(){
+        include get_stylesheet_directory().'\admin-pages\mapping-canvas.php';
+    }
+
+    function sectionManagement(){
+        include get_stylesheet_directory().'\admin-pages\section-management.php';
+    }
+
+    // remember to solve the issue with pagination.
+    function paginize($pages){
+        $li = "";
+
+        if(!$_GET['_page'] || $_GET['_page'] < 10){
+            $celling = floor($pages[0]->number / 10) < 10? floor($pages[0]->number / 10) : 10;
+
+            for ($i = 0; $i < $celling; $i++){
+                $li = $li . "<li class='page-item " . activate($i) . " '><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=' . $i . '') . "'>" . $i . "</a></li>";
+            }
+            if($celling != floor($pages[0]->number / 10)){
+                $li = $li . "<li class='page-item'><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=10') . "'>&#x2192;</a></li>";
+            }
+        }
+        else if(floor($pages[0]->number / 10) >= $_GET['_page']){
+            $floor = floor($_GET['_page'] / 10) * 10;
+            $celling = ($floor + 9) < floor($pages[0]->number / 10)? ($floor + 9) : floor($pages[0]->number / 10);
+            $li = "<li class='page-item'><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=' . ($floor - 1) . '') . "'>&#x2190;</a></li>";
+            for ($i = $floor; $i <= $celling; $i++){
+                $li = $li . "<li class='page-item " . activate($i) . " '><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=' . $i . '') . "'>" . $i . "</a></li>";
+            }
+            if($celling != floor($pages[0]->number / 10)){
+                $li = $li . "<li class='page-item'><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=' . ($celling + 1) . '') . "'>&#x2192;</a></li>";
+            }
+        }
+        return $li;
+    }
+
+    function activate($i){
+        if(!$_GET['_page'] && $i == 0){
+            return 'active';
+        }
+        else if($_GET['_page'] == $i){
+            return 'active';
+        }
     }
 ?>

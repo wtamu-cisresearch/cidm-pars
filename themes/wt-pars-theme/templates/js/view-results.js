@@ -4,7 +4,6 @@
         $(".record").on("click", function(){
 
             $("#myModal").show();
-
             var section_id = $(this).data("section_id");
             console.info(section_id);
 
@@ -12,6 +11,7 @@
                 url: settings.root + 'wt-pars-theme/v2/viewresults/' + section_id,
                 method: 'GET',
                 beforeSend: function(xhr){
+                    $("#spinner").addClass("spinner");
                     xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
                 },
                 success: function (data) {
@@ -64,6 +64,9 @@
                     $('#_feedback').text(data[0].feedback);
                     $('#_proposed_action').text(data[0].proposed_action);
         
+                },
+                complete: function(){
+                    $("#spinner").removeClass("spinner");
                 },
                 error: function (xhr, status, error) {
                     console.info(xhr.responseText);

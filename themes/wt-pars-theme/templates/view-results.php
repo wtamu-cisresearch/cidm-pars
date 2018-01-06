@@ -21,37 +21,11 @@
     if($_GET['_period']){
         parse_str($_GET['_period'], $output);
         $default = $output['y'] . ' ' . $output['t'];
-        $records = $wpdb->get_results( "SELECT
-                                            pars_section.section_id,
-                                            pars_course.code AS course,
-                                            pars_section.number,
-                                            pars_section.year AS year,
-                                            pars_section.term AS term
-                                        FROM
-                                            pars_section,
-                                            pars_course
-                                        WHERE
-                                            pars_section.course_id = pars_course.course_id AND pars_section.year = '" . $output['y'] . "' AND pars_section.term = '" . $output['t'] .  "'
-                                        ORDER BY
-                                            course,
-                                            number" );
+        $records = getData($wpdb, $output['y'], $output['t']);
     }
     else{
         $default = '2010 Spring';
-        $records = $wpdb->get_results( "SELECT
-                                            pars_section.section_id,
-                                            pars_course.code AS course,
-                                            pars_section.number,
-                                            pars_section.year AS year,
-                                            pars_section.term AS term
-                                        FROM
-                                            pars_section,
-                                            pars_course
-                                        WHERE
-                                            pars_section.course_id = pars_course.course_id AND pars_section.year = 2010 AND pars_section.term = 'Spring'
-                                        ORDER BY
-                                            course,
-                                            number" );
+        $records = getData($wpdb, '2010', 'Spring');
     }
 
     echo "<form action='' method='get'>
@@ -95,6 +69,25 @@
                         </tr>";
         }
         return $tr;
+    }
+
+    function getData($wpdb, $x, $y){
+        $data = $wpdb->get_results( $wpdb->prepare(
+            "SELECT
+                pars_section.section_id,
+                pars_course.code AS course,
+                pars_section.number,
+                pars_section.year AS year,
+                pars_section.term AS term
+            FROM
+                pars_section,
+                pars_course
+            WHERE
+                pars_section.course_id = pars_course.course_id AND pars_section.year = '%s' AND pars_section.term = '%s'
+            ORDER BY
+                course,
+                number", $x, $y));
+        return $data;
     }
 
     get_footer();

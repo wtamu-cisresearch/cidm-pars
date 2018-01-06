@@ -22,117 +22,11 @@
     if($_GET['_period']){
         parse_str($_GET['_period'], $p);
         $default = $p['y'] . ' ' . $p['t'];
-        $records = $wpdb->get_results( "SELECT
-                                            pars_program_educational_objective.peo_id,
-                                            pars_program_educational_objective.code AS peo_code,
-                                            pars_program_educational_objective.description peo_description,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.exemplary) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS exemplary,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.good) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS good,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.satisfactory) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS satisfactory,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.poor) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS poor,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.unsatisfactory) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS unsatisfactory
-                                        FROM
-                                            pars_section,
-                                            pars_measure,
-                                            pars_alpha,
-                                            pars_beta,
-                                            pars_program_educational_objective
-                                        WHERE
-                                            pars_section.section_id = pars_alpha.section_id AND pars_alpha.alpha_id = pars_beta.alpha_id AND pars_beta.peo_id = pars_program_educational_objective.peo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_section.year = " . $p['y'] . " AND pars_section.term = '" . $p['t'] . "'
-                                        GROUP BY
-                                            pars_program_educational_objective.code ");
+        $records = getData($wpdb, $p['y'], $p['t']);
     }
     else{
          $default = '2010 Spring';
-         $records = $wpdb->get_results( "SELECT
-                                            pars_program_educational_objective.peo_id,
-                                            pars_program_educational_objective.code AS peo_code,
-                                            pars_program_educational_objective.description peo_description,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.exemplary) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS exemplary,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.good) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS good,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.satisfactory) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS satisfactory,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.poor) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS poor,
-                                            ROUND(
-                                                (
-                                                    SUM(pars_measure.unsatisfactory) /(
-                                                        SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
-                                                    ) * 100
-                                                ),
-                                                2
-                                            ) AS unsatisfactory
-                                        FROM
-                                            pars_section,
-                                            pars_measure,
-                                            pars_alpha,
-                                            pars_beta,
-                                            pars_program_educational_objective
-                                        WHERE
-                                            pars_section.section_id = pars_alpha.section_id AND pars_alpha.alpha_id = pars_beta.alpha_id AND pars_beta.peo_id = pars_program_educational_objective.peo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_section.year = 2010 AND pars_section.term = 'Spring'
-                                        GROUP BY
-                                            pars_program_educational_objective.code" );
+         $records = getData($wpdb, '2010', 'Spring');
     }
 
     echo "<form action='' method='get'>
@@ -184,6 +78,65 @@
                         </tr>";
         }
         return $tr;
+    }
+
+    function getData($wpdb, $x, $y){
+        $data = $wpdb->get_results( $wpdb->prepare(
+            "SELECT
+                pars_program_educational_objective.peo_id,
+                pars_program_educational_objective.code AS peo_code,
+                pars_program_educational_objective.description peo_description,
+                ROUND(
+                    (
+                        SUM(pars_measure.exemplary) /(
+                            SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
+                        ) * 100
+                    ),
+                    2
+                ) AS exemplary,
+                ROUND(
+                    (
+                        SUM(pars_measure.good) /(
+                            SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
+                        ) * 100
+                    ),
+                    2
+                ) AS good,
+                ROUND(
+                    (
+                        SUM(pars_measure.satisfactory) /(
+                            SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
+                        ) * 100
+                    ),
+                    2
+                ) AS satisfactory,
+                ROUND(
+                    (
+                        SUM(pars_measure.poor) /(
+                            SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
+                        ) * 100
+                    ),
+                    2
+                ) AS poor,
+                ROUND(
+                    (
+                        SUM(pars_measure.unsatisfactory) /(
+                            SUM(pars_measure.exemplary) + SUM(pars_measure.good) + SUM(pars_measure.satisfactory) + SUM(pars_measure.poor) + SUM(pars_measure.unsatisfactory)
+                        ) * 100
+                    ),
+                    2
+                ) AS unsatisfactory
+            FROM
+                pars_section,
+                pars_measure,
+                pars_alpha,
+                pars_beta,
+                pars_program_educational_objective
+            WHERE
+                pars_section.section_id = pars_alpha.section_id AND pars_alpha.alpha_id = pars_beta.alpha_id AND pars_beta.peo_id = pars_program_educational_objective.peo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_section.year = '%s' AND pars_section.term = '%s'
+            GROUP BY
+                pars_program_educational_objective.code", $x, $y));
+        return $data;
     }
 
     get_footer();
