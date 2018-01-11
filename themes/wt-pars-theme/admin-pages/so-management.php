@@ -4,7 +4,7 @@
 
     include get_stylesheet_directory().'\admin-pages\html\so-management.html';
     
-    wp_enqueue_style( 'admin-modal' );
+    wp_enqueue_style( 'admin' );
 
     wp_enqueue_script( 'so-management' );
     wp_localize_script( 'so-management', 'settings', array(

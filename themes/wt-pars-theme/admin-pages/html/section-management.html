@@ -6,12 +6,10 @@
         <!-- <form id="submit_form" action="javascript:"> -->
         <form id="submit_form" action="">
             <br/><br/>
-            <select class="streched">
+            <select id="course-hook" class="streched">
                 <option default> - Course Code - </option>
             </select>
             <br/><br/>
-            <!-- <label>Course Code</label> 
-            <input class="form-control" type="text" id="course_code"> -->
             <label>Course Name</label> 
             <input class="form-control" type="text" id="course_name">
             <br/>
@@ -19,19 +17,36 @@
             <textarea class="form-control" id="course_description">
             </textarea>            
             <br/><br/>
-            <select class="streched">
+            <select id="instructor-hook" class="streched">
                 <option default> - Instructor - </option>
             </select>
             <br/><br/>
-            <select class="streched">
-                <option default> - Year - </option>
+            <select id="year-hook" class="streched">
             </select>
             <br/><br/>
             <select class="streched">
                 <option default> - Term - </option>
+                <option>Spring</option>
+                <option>Summer I</option>
+                <option>Summer II</option>
+                <option>Fall</option>
             </select>
             <br/><br/>
-            <button class="btn btn-primary streched" id="add">Add</button>
+            <div>
+                <select multiple="multiple" size="2" id="y-hook" class="content-box">
+
+                </select>
+                <div class="arrow-box">
+                    <button type="button" id="y-snatch" class="btn btn-outline-primary arrow-button">&#10096;</button>
+                    <br/><br/>
+                    <button type="button" id="x-snatch" class="btn btn-outline-primary arrow-button">&#10097;</button>
+                </div>
+                <select multiple="multiple" size="2" id="x-hook" class="content-box">
+
+                </select>
+            </div>
+            <br/><br/>
+            <button class="btn btn-outline-primary clickable" id="add">Add</button>
         </form>     
         <div class="modal-footer">
         </div>

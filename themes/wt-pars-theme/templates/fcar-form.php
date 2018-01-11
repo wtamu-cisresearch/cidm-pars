@@ -9,7 +9,7 @@
     
     include plugin_dir_path(__FILE__).'html\fcar-form.html';
 
-    wp_enqueue_style( 'modal' );
+    wp_enqueue_style( 'template' );
     wp_enqueue_script( 'fcar-form' );
 
     $records = $wpdb->get_results( "SELECT course, section, year, term, assessment_startdate, assessment_enddate FROM assignment WHERE uid = " .  (get_current_user_id() + 110) . " "); /*'" . date('Y') . "'");*/

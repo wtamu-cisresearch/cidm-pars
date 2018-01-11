@@ -81,6 +81,16 @@
             'callback' => 'delete_so',
             'permission_callback' => 'check_levelOne',
         ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/createsection', array(
+            'methods' => 'GET',
+            'callback' => 'get_create_section',
+            'permission_callback' => 'check_levelOne',
+        ) );
+        register_rest_route( 'wt-pars-theme/v2', '/testfiles', array(
+            'methods' => 'GET',
+            'callback' => 'get_testfiles',
+            'permission_callback' => 'check_levelTwo',
+        ) );
     } );
 
 
@@ -545,6 +555,56 @@
             WHERE
                 pars_section.course_id = pars_course.course_id AND pars_alpha.section_id = pars_section.section_id AND pars_course_learning_outcome.clo_id = pars_alpha.clo_id AND pars_measure.alpha_id = pars_alpha.alpha_id AND pars_section.term = '%s' AND pars_section.year = '%s' AND pars_alpha.clo_id = '%d'", $data['term'], $data['year'], $data['clo_id']));
         return $data;
+    }
+
+    function get_create_section( $data ) {
+        global $wpdb;
+        $data = array(
+            "course" => $wpdb->get_results(
+                "SELECT
+                    pars_course.course_id,
+                    pars_course.code AS course_code,
+                    pars_course.name AS course_name,
+                    pars_course.description AS course_description
+                FROM
+                    pars_course"),
+            "instructor" => $wpdb->get_results(
+                "SELECT
+                    CONCAT(
+                        firstname.meta_value,
+                        ' ',
+                        lastname.meta_value
+                    ) AS instructor
+                FROM
+                    wp_usermeta AS firstname
+                INNER JOIN(
+                    SELECT
+                        user_id,
+                        meta_key,
+                        meta_value
+                    FROM
+                        wp_usermeta
+                    WHERE
+                        meta_key = 'last_name'
+                ) AS lastname
+                ON
+                    firstname.user_id = lastname.user_id
+                WHERE
+                    firstname.meta_key = 'first_name'"),
+            "clo" => $wpdb->get_results(
+                "SELECT
+                    pars_course_learning_outcome.clo_id,
+                    pars_course_learning_outcome.code AS clo_code,
+                    pars_course_learning_outcome.description AS clo_description
+                FROM
+                    pars_course_learning_outcome"),                    
+        );
+        
+        return $data;
+    }
+
+    function get_testfiles(){
+        return readfile("wp-content/themes/wt-pars-theme/attachments/testfile.pdf");
     }
                                 
 ?>

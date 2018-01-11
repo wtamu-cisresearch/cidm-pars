@@ -4,7 +4,7 @@
     
     include get_stylesheet_directory().'\admin-pages\html\section-management.html';
 
-    wp_enqueue_style( 'admin-modal' );
+    wp_enqueue_style( 'admin' );
     
     wp_enqueue_script( 'section-management' );
     wp_localize_script( 'section-management', 'settings', array(
@@ -23,7 +23,7 @@
 
     echo ("
         <div style='padding:20px;'>
-            <button class='btn btn-primary' id='create-record'>Create Section</button>
+            <button class='btn btn-outline-primary clickable' id='create-record'>Create Section</button>
             <table class='table table-striped'>
                 <thead>
                     <tr>

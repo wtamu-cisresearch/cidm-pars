@@ -2,9 +2,8 @@
 
     include get_stylesheet_directory().'\endpoints\endpoints.php';
 
-    wp_register_style( 'modal', get_stylesheet_directory_uri().'/css/modal.css' );
-    wp_register_style( 'admin-modal', get_stylesheet_directory_uri().'/css/admin-modal.css' );
-    wp_register_style( 'mapping-canvas', get_stylesheet_directory_uri().'/css/mapping-canvas.css' );   
+    wp_register_style( 'template', get_stylesheet_directory_uri().'/css/template.css' );
+    wp_register_style( 'admin', get_stylesheet_directory_uri().'/css/admin.css' );
 
     // bootstrap
     wp_register_script( 'bootstrap', get_stylesheet_directory_uri().'/bootstrap-4.0.0-beta.2-dist/js/bootstrap.js' );
@@ -25,6 +24,8 @@
     wp_register_script( 'so-student-outcomes', get_stylesheet_directory_uri().'/templates/js/so-student-outcomes.js' );
     wp_register_script( 'peo-program-educational-objective', get_stylesheet_directory_uri().'/templates/js/peo-program-educational-objective.js' );
     wp_register_script( 'fcar-form', get_stylesheet_directory_uri().'/templates/js/fcar-form.js' );
+
+    wp_register_script( 'test', get_stylesheet_directory_uri().'/test.js' );
 
     add_action('admin_menu', 'adminPages');
     

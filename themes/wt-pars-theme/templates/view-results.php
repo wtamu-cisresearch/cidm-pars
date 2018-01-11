@@ -9,7 +9,7 @@
 
     include plugin_dir_path(__FILE__).'html\view-results.html';
 
-    wp_enqueue_style( 'modal' );
+    wp_enqueue_style( 'template' );
     wp_enqueue_script( 'view-results' );
     wp_localize_script( 'view-results', 'settings', array(
         'root' => esc_url_raw( rest_url() ),

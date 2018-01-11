@@ -10,7 +10,7 @@
 
     include plugin_dir_path(__FILE__).'html\so-student-outcomes.html';
 
-    wp_enqueue_style( 'modal' );
+    wp_enqueue_style( 'template' );
     wp_enqueue_script( 'so-student-outcomes' );
     wp_localize_script( 'so-student-outcomes', 'settings', array(
         'root' => esc_url_raw( rest_url() ),

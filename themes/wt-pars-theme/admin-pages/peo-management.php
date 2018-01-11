@@ -4,7 +4,7 @@
 
     include get_stylesheet_directory().'\admin-pages\html\peo-management.html';
 
-    wp_enqueue_style( 'admin-modal' );
+    wp_enqueue_style( 'admin' );
 
     wp_enqueue_script( 'peo-management' );
     wp_localize_script( 'peo-management', 'settings', array(

@@ -10,7 +10,7 @@
 
     include plugin_dir_path(__FILE__).'html\peo-program-educational-objective.html';
 
-    wp_enqueue_style( 'modal' );
+    wp_enqueue_style( 'template' );
     wp_enqueue_script( 'peo-program-educational-objective' );
     wp_localize_script( 'peo-program-educational-objective', 'settings', array(
         'root' => esc_url_raw( rest_url() ),

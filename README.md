@@ -14,9 +14,9 @@ Entity Relational Digram
 -------------
 
 
-![Alt text](_erd.jpeg?raw=true "ERD")
+![Alt text](erd.jpeg?raw=true "ERD")
 
-Refernce queries.sql 
+Refer to queries.sql 
 
 
 ----------
