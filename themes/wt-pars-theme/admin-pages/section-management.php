@@ -22,7 +22,9 @@
     $pages = $wpdb->get_results( "SELECT COUNT(section_id) AS number FROM pars_section");
 
     echo ("
-        <div style='padding:20px;'>
+        <div id='main-view' class='jacket'>
+            <h3 class='headline'>Section Management</h3>
+            <hr class='underline'>
             <button class='btn btn-outline-primary clickable' id='create-record'>Create Section</button>
             <table class='table table-striped'>
                 <thead>

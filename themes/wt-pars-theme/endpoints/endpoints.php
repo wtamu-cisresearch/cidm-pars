@@ -86,6 +86,11 @@
             'callback' => 'get_create_section',
             'permission_callback' => 'check_levelOne',
         ) );
+        register_rest_route( 'wt-pars-theme/v2', '/admin/alphastage/(?P<course_id>\d+)/(?P<instructor_id>\d+)/(?P<instructor>.+)/(?P<section_number>\w+)/(?P<year>\w+)/(?P<term>\w+)/(?P<clo_id>.+)', array(
+            'methods' => 'POST',
+            'callback' => 'post_alphaStage',
+            'permission_callback' => 'check_levelOne',
+        ) );
         register_rest_route( 'wt-pars-theme/v2', '/testfiles', array(
             'methods' => 'GET',
             'callback' => 'get_testfiles',
@@ -570,6 +575,7 @@
                     pars_course"),
             "instructor" => $wpdb->get_results(
                 "SELECT
+                    lastname.user_id AS instructor_id,
                     CONCAT(
                         firstname.meta_value,
                         ' ',
@@ -601,6 +607,54 @@
         );
         
         return $data;
+    }
+
+    function post_alphaStage( $data ) {
+        // global $wpdb;
+        // $data = $wpdb->get_results( $wpdb->prepare(
+        //     "START TRANSACTION
+        //         INSERT INTO pars_section(
+        //             course_id,
+        //             instructor_id,
+        //             instructor,
+        //             NUMBER,
+        //             term,
+        //             YEAR,
+        //             ENABLE
+        //         )
+        //         VALUES(
+        //             404,
+        //             404,
+        //             404,
+        //             404,
+        //             404,
+        //             404,
+        //             0
+        //         );
+        //         INSERT INTO pars_section(
+        //             course_id,
+        //             instructor_id,
+        //             instructor,
+        //             NUMBER,
+        //             term,
+        //             YEAR,
+        //             ENABLE
+        //         )
+        //         VALUES(
+        //             404,
+        //             404,
+        //             404,
+        //             404,
+        //             404,
+        //             404,
+        //             0
+        //         );
+        //         COMMIT
+        //             ;", $data['id']));
+
+        $x = explode(',', $data["clo_id"]);
+        
+        return $x;
     }
 
     function get_testfiles(){

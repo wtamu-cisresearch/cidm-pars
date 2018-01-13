@@ -22,8 +22,10 @@
     $pages = $wpdb->get_results( "SELECT COUNT(so_id) AS number FROM pars_student_outcome");
 
     echo "
-        <div style='padding:20px;'>
-            <button class='btn btn-primary' id='add_record'>Add SO</button>
+        <div class='jacket'>
+            <h3 class='headline'>Student Outcome Management</h3>
+            <hr class='underline'>
+            <button class='btn btn-outline-primary clickable' id='add_record'>Add SO</button>
             <table class='table table-striped'>
                 <thead>
                     <tr>
