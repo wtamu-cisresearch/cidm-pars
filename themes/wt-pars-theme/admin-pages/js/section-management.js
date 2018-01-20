@@ -78,14 +78,21 @@
                 $("#myModal").hide();
             });
 
-            $("#hook-section").on("click", function (){
+            $("#section-number").on("focusout", function (){
                 var span = document.createElement("span");
-                span.id = "section-baby";
+                span.className = "section-baby";
                 span.innerText = $("#section-number").val();
                 $("#section-hook").append(span);
                 $("#section-number").val("");
             });
 
+            // $("#hook-section").on("click", function (){
+            //     var span = document.createElement("span");
+            //     span.id = "section-baby";
+            //     span.innerText = $("#section-number").val();
+            //     $("#section-hook").append(span);
+            //     $("#section-number").val("");
+            // });
 
             $("#add").on("click", function (event) {
                 event.preventDefault();
@@ -93,21 +100,27 @@
                 var course_id = $("#course-hook").find(":selected").data("course_id");
                 var instructor = $("#instructor-hook").val();
                 var instructor_id = $("#instructor-hook").find(":selected").data("instructor_id");
-                var section_number = $("#section-number").val();
                 var year_selected = $("#year-hook").val();
                 var term = $("#term").val();
 
                 console.log(course_id + " " + instructor + " " + instructor_id + " " + year_selected + " " + term);
 
                 var clo_id = [];
+                var section_number = [];
 
                 for (var i = 0; i < $("#y-hook").find(":selected").length; i++) {
-                    console.log($("#y-hook").find(":selected")[i].dataset.clo_id);
+                    // console.log($("#y-hook").find(":selected")[i].dataset.clo_id);
                     clo_id.push($("#y-hook").find(":selected")[i].dataset.clo_id);
                 }
 
-                JSON.stringify(clo_id);
+                for (var i = 0; i < $(".section-baby").length; i++) {
+                    // console.log($(".section-baby")[i].innerText);
+                    section_number.push($(".section-baby")[i].innerText);
+                }
 
+                JSON.stringify(clo_id);
+                JSON.stringify(section);
+                
                 $.ajax({
                     url: settings.root + "wt-pars-theme/v2/admin/alphastage/" + course_id + "/" + instructor_id + "/" + instructor + "/" + section_number + "/" + year_selected + "/" + term + "/" + clo_id,
                     method: 'POST',

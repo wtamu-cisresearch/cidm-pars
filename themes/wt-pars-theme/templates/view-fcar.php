@@ -1,17 +1,17 @@
 <?php
     /*
-        Template Name: View Result
+        Template Name: View FCAR
     */
 
     get_header();
 
     global $wpdb;
 
-    include plugin_dir_path(__FILE__).'html\view-results.html';
+    include plugin_dir_path(__FILE__).'html\view-fcar.html';
 
     wp_enqueue_style( 'template' );
-    wp_enqueue_script( 'view-results' );
-    wp_localize_script( 'view-results', 'settings', array(
+    wp_enqueue_script( 'view-fcar' );
+    wp_localize_script( 'view-fcar', 'settings', array(
         'root' => esc_url_raw( rest_url() ),
         'nonce' => wp_create_nonce( 'wp_rest' )
     ) );

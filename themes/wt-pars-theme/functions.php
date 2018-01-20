@@ -5,7 +5,7 @@
     wp_register_style( 'template', get_stylesheet_directory_uri().'/css/template.css' );
     wp_register_style( 'admin', get_stylesheet_directory_uri().'/css/admin.css' );
 
-    // bootstrap
+    // Bootstrap
     wp_register_script( 'bootstrap', get_stylesheet_directory_uri().'/bootstrap-4.0.0-beta.2-dist/js/bootstrap.js' );
     wp_register_style( 'bootstrap', get_stylesheet_directory_uri().'/bootstrap-4.0.0-beta.2-dist/css/bootstrap.css' );
     wp_enqueue_style( 'bootstrap' );
@@ -20,18 +20,86 @@
     wp_register_script( 'section-management', get_stylesheet_directory_uri().'/admin-pages/js/section-management.js' );
 
     // For templates
-    wp_register_script( 'view-results', get_stylesheet_directory_uri().'/templates/js/view-results.js' );
+    wp_register_script( 'view-fcar', get_stylesheet_directory_uri().'/templates/js/view-fcar.js' );
     wp_register_script( 'so-student-outcomes', get_stylesheet_directory_uri().'/templates/js/so-student-outcomes.js' );
     wp_register_script( 'peo-program-educational-objective', get_stylesheet_directory_uri().'/templates/js/peo-program-educational-objective.js' );
     wp_register_script( 'fcar-form', get_stylesheet_directory_uri().'/templates/js/fcar-form.js' );
 
     wp_register_script( 'test', get_stylesheet_directory_uri().'/test.js' );
 
+    add_action('after_switch_theme', 'initTheme', 10, 2);
     add_action('admin_menu', 'adminPages');
+
+    function initTheme($oldtheme_title, $oldtheme){
+        global $wpdb;
+
+        try{
+            $pars_section = (checkEngine('pars_section')) ? $wpdb->query("ALTER TABLE pars_section ENGINE=InnoDB;") : true;
+            $pars_attachment = (checkEngine('pars_attachment')) ? $wpdb->query("ALTER TABLE pars_attachment ENGINE=InnoDB;") : true;
+            $pars_course = (checkEngine('pars_course')) ? $wpdb->query("ALTER TABLE pars_course ENGINE=InnoDB;") : true;
+            $pars_alpha = (checkEngine('pars_alpha')) ? $wpdb->query("ALTER TABLE pars_alpha ENGINE=InnoDB;") : true;
+            $pars_course_learning_outcome = (checkEngine('pars_course_learning_outcome')) ? $wpdb->query("ALTER TABLE pars_course_learning_outcome ENGINE=InnoDB;") : true;
+            $pars_beta = (checkEngine('pars_beta')) ? $wpdb->query("ALTER TABLE pars_beta ENGINE=InnoDB;") : true;
+            $pars_program_educational_objective = (checkEngine('pars_program_educational_objective')) ? $wpdb->query("ALTER TABLE pars_program_educational_objective ENGINE=InnoDB;") : true;
+            $pars_student_outcome = (checkEngine('pars_student_outcome')) ? $wpdb->query("ALTER TABLE pars_student_outcome ENGINE=InnoDB;") : true;
+            $pars_measure = (checkEngine('pars_measure')) ? $wpdb->query("ALTER TABLE pars_measure ENGINE=InnoDB;") : true;
+
+            if ($pars_section === false){
+                throw new Exception('Issue setting pars_section db table to InnoDB. Table may not exist');
+            }
+            if ($pars_attachment === false){
+                throw new Exception('Issue setting pars_attachment db table to InnoDB. Table may not exist');
+            }
+            if ($pars_course === false){
+                throw new Exception('Issue setting pars_course db table to InnoDB. Table may not exist');
+            }
+            if ($pars_alpha === false){
+                throw new Exception('Issue setting pars_alpha db table to InnoDB. Table may not exist');
+            }
+            if ($pars_course_learning_outcome === false){
+                throw new Exception('Issue setting pars_course_learning_outcome db table to InnoDB. Table may not exist');
+            }
+            if ($pars_beta === false){
+                throw new Exception('Issue setting pars_beta to InnoDB. Table may not exist');
+            }
+            if ($pars_program_educational_objective === false){
+                throw new Exception('Issue setting pars_program_educational_objective db table to InnoDB. Table may not exist');
+            }
+            if ($pars_student_outcome === false){
+                throw new Exception('Issue setting pars_student_outcome db table to InnoDB. Table may not exist');
+            }
+            if ($pars_measure === false){
+                throw new Exception('Issue setting pars_measure db table to InnoDB. Table may not exist');
+            }
+        }
+        catch (Exception $e){
+            echo ("<script type='text/javascript'>console.log('" . $e->getMessage() . ". You have been switched back to the theme " . $oldtheme_title . "');</script>");
+            add_action('admin_notices', 'activationFailure');
+            switch_theme($oldtheme->stylesheet);
+        }
+    }
+
+    function activationFailure(){
+        echo ("<div class='update-nag'>Exception cought. Refer to the console logs for more information.</div>");
+    }
+
+    function checkEngine($table){
+        global $wpdb;
+
+        $result = $wpdb->query($wpdb->prepare(
+            "SELECT ENGINE
+            FROM
+                information_schema.TABLES
+            WHERE 
+                TABLE_NAME = '%s' AND TABLE_SCHEMA = '%s'", $table, $wpdb->dbname));
+
+        $result = ($result != 'InnoDB') ? true : false;
+
+        return $result;
+    }
     
     function adminPages() {
-
-        add_menu_page('PARS', 'PARS', 'manage_options', 'pars', 'parsMain', '', 26);
+        add_menu_page('PARS', 'PARS', 'manage_options', 'pars', 'parsMain', 'dashicons-welcome-learn-more', 26);
         add_submenu_page('pars', 'Section Management', 'Section Management', 'manage_options', 'section-management', 'sectionManagement');
         add_submenu_page('pars', 'Mapping Canvas', 'Mapping Canvas', 'manage_options', 'mapping-canvas', 'mappingCanvas');
         add_submenu_page('pars', 'Course Management', 'Course Management', 'manage_options', 'course-management', 'courseManagement');

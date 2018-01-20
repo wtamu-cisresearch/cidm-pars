@@ -86,7 +86,7 @@
             'callback' => 'get_create_section',
             'permission_callback' => 'check_levelOne',
         ) );
-        register_rest_route( 'wt-pars-theme/v2', '/admin/alphastage/(?P<course_id>\d+)/(?P<instructor_id>\d+)/(?P<instructor>.+)/(?P<section_number>\w+)/(?P<year>\w+)/(?P<term>\w+)/(?P<clo_id>.+)', array(
+        register_rest_route( 'wt-pars-theme/v2', '/admin/alphastage/(?P<course_id>\d+)/(?P<instructor_id>\d+)/(?P<instructor>.+)/(?P<section_number>.+)/(?P<year>\w+)/(?P<term>.+)/(?P<clo_id>.+)', array(
             'methods' => 'POST',
             'callback' => 'post_alphaStage',
             'permission_callback' => 'check_levelOne',
@@ -608,53 +608,66 @@
         
         return $data;
     }
-
+    
     function post_alphaStage( $data ) {
-        // global $wpdb;
-        // $data = $wpdb->get_results( $wpdb->prepare(
-        //     "START TRANSACTION
-        //         INSERT INTO pars_section(
-        //             course_id,
-        //             instructor_id,
-        //             instructor,
-        //             NUMBER,
-        //             term,
-        //             YEAR,
-        //             ENABLE
-        //         )
-        //         VALUES(
-        //             404,
-        //             404,
-        //             404,
-        //             404,
-        //             404,
-        //             404,
-        //             0
-        //         );
-        //         INSERT INTO pars_section(
-        //             course_id,
-        //             instructor_id,
-        //             instructor,
-        //             NUMBER,
-        //             term,
-        //             YEAR,
-        //             ENABLE
-        //         )
-        //         VALUES(
-        //             404,
-        //             404,
-        //             404,
-        //             404,
-        //             404,
-        //             404,
-        //             0
-        //         );
-        //         COMMIT
-        //             ;", $data['id']));
 
-        $x = explode(',', $data["clo_id"]);
+        global $wpdb;
+
+        $section_number = explode(',', $data["section_number"]);
+        $clo_id = explode(',', $data["clo_id"]);
+
+        $result = array();
+
+        $wpdb->query('START TRANSACTION;');
         
-        return $x;
+        for ($i = 0; $i < count($section_number); $i++){
+            array_push($result, $wpdb->insert('pars_section',
+                    array(
+                        'course_id'=>$data['course_id'],
+                        'instructor_id'=>$data['instructor_id'],
+                        'instructor'=>$data['instructor'],
+                        'number'=>$section_number[$i],
+                        'year'=>$data['year'],
+                        'term'=>$data['term'],
+                        'enable'=>0
+                    ),
+                    array(
+                        '%d',
+                        '%d',
+                        '%s',
+                        '$d',
+                        '%s',
+                        '%s',
+                        '%d'
+                    )
+                ));
+                
+            $id = $wpdb->insert_id;
+            
+            for($x = 0; $x < count(clo_id); $x++){
+                array_push($result, $wpdb->insert('pars_alpha',
+                        array(
+                            'clo_id'=>$clo_id[$x],
+                            'section_id'=>$id,
+                            'enable'=>0
+                        ),
+                        array(
+                            '%d',
+                            '%d',
+                            '%d'
+                        )
+                    ));
+            }
+        }
+
+        if(in_array(false, $result)){
+            $wpdb->query('ROLLBACK;');
+        }
+        else{
+            $wpdb->query('COMMIT;');
+        }
+        
+        return true;
     }
 
     function get_testfiles(){

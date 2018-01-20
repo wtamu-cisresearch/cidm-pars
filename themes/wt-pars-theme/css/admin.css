@@ -113,13 +113,13 @@
     margin-top: 6px;
 }
 
-#section-baby{
+.section-baby{
     padding: 4px;
     padding-top: 2px;
     background-color: #ccc;
     border-radius: 5px;
     margin-left: 10px;
-    margin-right: 8px
+    margin-right: 8px;
 }
 
 #section-number{
