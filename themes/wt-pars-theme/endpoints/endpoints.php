@@ -615,36 +615,40 @@
 
         $section_number = explode(',', $data["section_number"]);
         $clo_id = explode(',', $data["clo_id"]);
-
+        $course_id = intval($data['course_id']);
+        $instructor_id = intval($data['course_id']);
+        $instructor = urldecode($data['instructor']);
+        $term = urldecode($data['term']);
         $result = array();
 
         $wpdb->query('START TRANSACTION;');
         
+        
         for ($i = 0; $i < count($section_number); $i++){
             array_push($result, $wpdb->insert('pars_section',
                     array(
-                        'course_id'=>$data['course_id'],
-                        'instructor_id'=>$data['instructor_id'],
-                        'instructor'=>$data['instructor'],
-                        'number'=>$section_number[$i],
+                        'course_id'=>$course_id,
+                        'instructor_id'=>$instructor_id,
+                        'instructor'=>$instructor,
+                        'number'=>$section_number[0],
+                        'term'=>$term,
                         'year'=>$data['year'],
-                        'term'=>$data['term'],
                         'enable'=>0
                     ),
                     array(
                         '%d',
                         '%d',
                         '%s',
-                        '$d',
+                        '%s',
                         '%s',
                         '%s',
                         '%d'
                     )
                 ));
-                
+
             $id = $wpdb->insert_id;
             
-            for($x = 0; $x < count(clo_id); $x++){
+            for($x = 0; $x < count($clo_id); $x++){
                 array_push($result, $wpdb->insert('pars_alpha',
                         array(
                             'clo_id'=>$clo_id[$x],
@@ -659,14 +663,14 @@
                     ));
             }
         }
-
+        $wpdb->query('COMMIT;');
         if(in_array(false, $result)){
             $wpdb->query('ROLLBACK;');
         }
         else{
             $wpdb->query('COMMIT;');
         }
-        
+
         return true;
     }
 

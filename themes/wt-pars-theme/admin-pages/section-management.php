@@ -19,7 +19,7 @@
         $records = getData($wpdb, 0);
     }
 
-    $pages = $wpdb->get_results( "SELECT COUNT(section_id) AS number FROM pars_section");
+    $pages = $wpdb->get_results( "SELECT COUNT(section_id) AS number FROM pars_section WHERE enable = 0");
 
     echo ("
         <div id='main-view' class='jacket'>
@@ -81,7 +81,7 @@
                 pars_section,
                 pars_course
             WHERE
-                pars_section.course_id = pars_course.course_id
+                pars_section.course_id = pars_course.course_id AND enable = 0
             LIMIT %d, 10", $x));
         return $data;
     }

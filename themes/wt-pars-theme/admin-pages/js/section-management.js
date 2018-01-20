@@ -119,7 +119,7 @@
                 }
 
                 JSON.stringify(clo_id);
-                JSON.stringify(section);
+                JSON.stringify(section_number);
                 
                 $.ajax({
                     url: settings.root + "wt-pars-theme/v2/admin/alphastage/" + course_id + "/" + instructor_id + "/" + instructor + "/" + section_number + "/" + year_selected + "/" + term + "/" + clo_id,
