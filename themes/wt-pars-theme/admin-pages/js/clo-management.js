@@ -1,100 +1,92 @@
-var modal = document.getElementById('myModal');
+(function($){
+    $(document).ready(function() {
 
-var span = document.getElementsByClassName("close")[0];
+        $(".record").on("click", function(){
 
-var _id;
+            $("#add").hide();
+            $("#update").show();
+            $("#myModal").show();
 
-function pop(record){
-    
-    modal.style.display = "block";
+            $("#clo_code ").val($(this).data("code"));
+            $("#clo_description").val($(this).data("description"));
 
-    if(record){
-        document.getElementById('edit').style.display = "block";
-        document.getElementById('add').style.display = "none";
-        _id = record.nid5;
+            var clo_id = $(this).data("clo_id");
+            
+            $("#submit_form").on("submit", function(event){
+                event.preventDefault();
+                var clo_code = $("#clo_code ").val();
+                var clo_description = $("#clo_description").val();
+                $.ajax({
+                    url: settings.root + 'wt-pars-theme/v2/admin/clo/' + clo_id + '/' + clo_code + '/' + clo_description,
+                    method: 'PUT',
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                    },
+                    success: function (responce) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.info(xhr.responseText);
+                    },
+                })
+            });
 
-        document.getElementById("year").value = record.year;
-        document.getElementById("term").value = record.term;
-        document.getElementById("course").value = record.course;
-        document.getElementById("section").value = record.section;
-        document.getElementById("clonumber").value = record.CloNo;
-        document.getElementById("clodes").value = record.CloDec;
-    }
-    else{
-        document.getElementById('edit').style.display = "none";
-        document.getElementById('add').style.display = "block";
-        _id = null;
-    }
-}
+            $("#delete").on("click", function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: settings.root + 'wt-pars-theme/v2/admin/clo/' + clo_id,
+                    method: 'DELETE',
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                    },
+                    success: function (responce) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.info(xhr.responseText);
+                    },
+                })
+            });
+        });
 
-function submit(){    
-    
-    var year = document.getElementById("year").value;
-    var term = document.getElementById("term").value;
-    var course = document.getElementById("course").value;
-    var section = document.getElementById("section").value;
-    var cloNumber = document.getElementById("clonumber").value;
-    var cloDes = document.getElementById("clodes").value;
+        $("#add_record").on("click", function(){
 
-    if(!_id){
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-                location.reload();
+            $("#update").hide();
+            $("#delete").hide();
+            $("#add").show();
+            $("#myModal").show();
+
+            $("#clo_code ").val("");
+            $("#clo_description").val("");
+            
+            $("#submit_form").on("submit", function(event){
+                event.preventDefault();
+                var clo_code = $("#clo_code ").val();
+                var clo_description = $("#clo_description").val();
+                $.ajax({
+                    url: settings.root + 'wt-pars-theme/v2/admin/clo/' + clo_code + '/' + clo_description,
+                    method: 'POST',
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                    },
+                    success: function (responce) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.info(xhr.responseText);
+                    },
+                })
+            }); 
+        });
+
+        $(".close").on("click", function(){
+            $("#myModal").hide();
+        });
+
+        $(window).on("click", function(event){
+            if (event.target == document.getElementById("myModal")) {
+                $("#myModal").hide();
             }
-        }
-        xmlHttp.open("POST", encodeURI('http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/clo/' + 
-                        course + '/' + year + '/' + term + '/' + section + '/' + cloNumber + '/' + cloDes), true );
-        xmlHttp.send( null );
-        modal.style.display = "none";
-        console.log(xmlHttp.responseText);
-    }
-    else{
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-                location.reload();
-            }
-        }
-        xmlHttp.open("POST", encodeURI('http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/clo/' + 
-                       _id + '/' + course + '/' + year + '/' + term + '/' + section + '/' + cloNumber + '/' + cloDes), true );
-        xmlHttp.send( null );
-        modal.style.display = "none";
-        console.log(xmlHttp.responseText);
-    }
-}
-
-function discard(){    
-
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-            location.reload();
-        }
-    }
-    xmlHttp.open( "DELETE", 'http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/clo/' + _id , true );
-    xmlHttp.send( null );
-    modal.style.display = "none";
-}
-
-function yaydata(data){
-    console.log(data);
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-    garbageCollector();    
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-        garbageCollector();
-    } 
-} 
-
-function garbageCollector(){
-    for(var bag in document.getElementsByClassName('garbage-collector')){
-        document.getElementsByClassName('garbage-collector')[bag].value = null;
-    }
-} 
+        });
+    });
+})(jQuery);

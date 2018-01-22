@@ -1,5 +1,14 @@
-<?php get_header() ?>
+<?php 
+    get_header();
 
-<h1>Main Page</h1>
+    wp_enqueue_script( 'test' );
+    wp_localize_script( 'test', 'settings', array(
+        'root' => esc_url_raw( rest_url() ),
+        'nonce' => wp_create_nonce( 'wp_rest' )
+    ) );
 
-<?php get_footer() ?>
+    echo ("Main page");
+
+    get_footer();
+?>
+

@@ -1,0 +1,56 @@
+<div id="child-view">
+    <h3 class="headline">Create Section</h3>
+    <hr class="underline">
+    <!-- <form id="submit_form" action="javascript:"> -->
+    <form id="submit_form" action="">
+        <select id="course-hook" class="space-box form-control streched">
+            <option default> - Course Code - </option>
+        </select>
+        <label>Course Name</label> 
+        <input class="space-box form-control" type="text" id="course-name" disabled>
+        <label>Course Description</label>
+        <textarea class="space-box form-control" id="course-description" disabled>
+        </textarea>            
+        <select id="instructor-hook" class="space-box form-control streched">
+            <option default> - Instructor - </option>
+        </select>
+        <select id="year-hook" class=" space-box form-control streched">
+        </select>
+        <select id="term" class="space-box form-control streched">
+            <option default> - Term - </option>
+            <option>Spring</option>
+            <option>Summer I</option>
+            <option>Summer II</option>
+            <option>Fall</option>
+        </select>
+        <label>Section Number</label>
+        <div class="space-box input-group" id="section-box">
+            <div id="section-hook">
+            </div>
+            <input type="text" class="form-control" id="section-number">
+            <!-- <button type="button" class="btn btn-default clickable" id="hook-section"> 
+                <i class="cool-plus">&#x2795;</i>
+            </button> -->
+        </div>
+        <div>
+            <div class="box-wrapper">
+                <label>Selected Course Learning Outcome[s]</label>
+                <select multiple="multiple" id="y-hook" class="space-box form-control content-box">
+                </select>
+            </div>
+            <div class="arrow-box">
+                <button type="button" id="y-snatch" class="btn btn-outline-primary arrow-button">&#10096;</button>
+                <br/><br/>
+                <button type="button" id="x-snatch" class="btn btn-outline-primary arrow-button">&#10097;</button>
+            </div>
+            <div class="box-wrapper">
+                <label>Available Course Learning Outcome[s]</label>
+                <select multiple="multiple" id="x-hook" class="space-box form-control content-box">
+
+                </select>
+            </div>
+        </div>
+        <button class="btn btn-outline-primary clickable" id="add">Add</button>
+    </form>     
+</div>
+

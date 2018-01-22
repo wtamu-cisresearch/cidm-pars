@@ -1,96 +1,92 @@
-var modal = document.getElementById('myModal');
+(function($){
+    $(document).ready(function() {
 
-var span = document.getElementsByClassName("close")[0];
+        $(".record").on("click", function(){
 
-var _id;
+            $("#add").hide();
+            $("#update").show();
+            $("#myModal").show();
 
-function pop(record){
-    
-    modal.style.display = "block";
+            $("#peo_code ").val($(this).data("code"));
+            $("#peo_description").val($(this).data("description"));
 
-    if(record){
-        document.getElementById('edit').style.display = "block";
-        document.getElementById('add').style.display = "none";
-        _id = record.nid;
+            var peo_id = $(this).data("peo_id");
+            
+            $("#submit_form").on("submit", function(event){
+                event.preventDefault();
+                var peo_code = $("#peo_code ").val();
+                var peo_description = $("#peo_description").val();
+                $.ajax({
+                    url: settings.root + 'wt-pars-theme/v2/admin/peo/' + peo_id + '/' + peo_code + '/' + peo_description,
+                    method: 'PUT',
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                    },
+                    success: function (responce) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.info(xhr.responseText);
+                    },
+                })
+            });
 
-        document.getElementById("year").value = record.year;
-        document.getElementById("term").value = record.term;
-        document.getElementById("peonumber").value = record.peo;
-        document.getElementById("peodes").value = record.peo_description;
-    }
-    else{
-        document.getElementById('edit').style.display = "none";
-        document.getElementById('add').style.display = "block";
-        _id = null;
-    }
-}
+            $("#delete").on("click", function(event){
+                event.preventDefault();
+                $.ajax({
+                    url: settings.root + 'wt-pars-theme/v2/admin/peo/' + peo_id,
+                    method: 'DELETE',
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                    },
+                    success: function (responce) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.info(xhr.responseText);
+                    },
+                })
+            });
+        });
 
-function submit(){    
-    
-    var year = document.getElementById("year").value;
-    var term = document.getElementById("term").value;
-    var peoNumber = document.getElementById("peonumber").value;
-    var peoDes = document.getElementById("peodes").value;
+        $("#add_record").on("click", function(){
 
-    if(!_id){
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-                location.reload();
+            $("#update").hide();
+            $("#delete").hide();
+            $("#add").show();
+            $("#myModal").show();
+
+            $("#peo_code ").val("");
+            $("#peo_description").val("");
+            
+            $("#submit_form").on("submit", function(event){
+                event.preventDefault();
+                var peo_code = $("#peo_code ").val();
+                var peo_description = $("#peo_description").val();
+                $.ajax({
+                    url: settings.root + 'wt-pars-theme/v2/admin/peo/' + peo_code + '/' + peo_description,
+                    method: 'POST',
+                    beforeSend: function(xhr){
+                        xhr.setRequestHeader( 'X-WP-Nonce', settings.nonce)
+                    },
+                    success: function (responce) {
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        console.info(xhr.responseText);
+                    },
+                })
+            }); 
+        });
+
+        $(".close").on("click", function(){
+            $("#myModal").hide();
+        });
+
+        $(window).on("click", function(event){
+            if (event.target == document.getElementById("myModal")) {
+                $("#myModal").hide();
             }
-        }
-        xmlHttp.open("POST", encodeURI('http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/peo/' + 
-                         year + '/' + term + '/' + peoNumber + '/' + peoDes), true );
-        xmlHttp.send( null );
-        modal.style.display = "none";
-        console.log(xmlHttp.responseText);
-    }
-    else{
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-                location.reload();
-            }
-        }
-        xmlHttp.open("POST", encodeURI('http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/peo/' + 
-                       _id +  '/' + year + '/' + term + '/' + peoNumber + '/' + peoDes), true );
-        xmlHttp.send( null );
-        modal.style.display = "none";
-        console.log(xmlHttp.responseText);
-    }
-}
-
-function discard(){    
-
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
-            location.reload();
-        }
-    }
-    xmlHttp.open( "DELETE", 'http://' + window.location.hostname + '/wt-pars/wp-json/wt-pars-plugin/v1/peo/' + _id , true );
-    xmlHttp.send( null );
-    modal.style.display = "none";
-}
-
-function yaydata(data){
-    console.log(data);
-}
-
-span.onclick = function() {
-    modal.style.display = "none";
-    garbageCollector();    
-}
-
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-        garbageCollector();
-    } 
-} 
-
-function garbageCollector(){
-    for(var bag in document.getElementsByClassName('garbage-collector')){
-        document.getElementsByClassName('garbage-collector')[bag].value = null;
-    }
-} 
+        });
+    });
+})(jQuery);

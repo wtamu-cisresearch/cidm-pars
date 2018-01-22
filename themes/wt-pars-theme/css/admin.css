@@ -1,0 +1,136 @@
+#myBtn{
+    cursor: pointer;
+}
+
+.modal {
+    display: none;
+    position: fixed; 
+    z-index: 3; 
+    left: 50px;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.streched{
+    width: 100%;
+}
+
+.clickable{
+    cursor: pointer;
+}
+
+  .content-box{
+    max-height: 300px;
+    min-height: 300px;
+    min-width: 1000px;
+    cursor: pointer;
+  }
+
+  .box-wrapper{
+    overflow-x: auto;
+    width: 45%;
+    float: left;
+  }
+
+  .shaddy{
+    background-color: #ccc;
+  }
+
+  .arrow-box{
+    width: 10%;
+    float: left;
+    padding-top: 5%;
+  }
+
+  .arrow-button{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    cursor: pointer;
+    min-width: 75px;
+  }
+  
+  .jacket{
+      padding: 20px;
+  }
+
+.headline{
+    color: #0073AA;
+}
+
+.underline{
+    background-color: #23282D;
+    margin-bottom: 40px;
+}
+
+.space-box{
+    margin-bottom: 40px;
+}
+
+#section-box{
+    border: 1px solid #ccc;
+}
+
+#section-hook{
+    margin: 4px;
+    margin-top: 6px;
+}
+
+.section-baby{
+    padding: 4px;
+    padding-top: 2px;
+    background-color: #ccc;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-right: 8px;
+}
+
+#section-number{
+    background-color: none;
+    border: none;
+}
+
+/*Mapping Canvas*/
+.box {
+    cursor:move;
+    width:150px;
+    height:60px;
+    background-color:#23282D;
+    border:1px solid #23282D;
+    margin:2px;
+    float:left;
+  }
+
+  .box-clo{
+      color: white;
+      text-align: center;
+  }
+
+

@@ -3,44 +3,19 @@
         <div class="modal-header">
             <span class="close">&times;</span>
         </div>
-        <form action="javascript:submit();">
-            <label>Year</label> 
-            <select class="form-control garbage-collector" id="year">
-                <option>2010</option>
-                <option>2011</option>
-                <option>2012</option>
-                <option>2013</option>
-            </select> 
-            <lable><b>Term</b></lable>
-            <select class="form-control garbage-collector" id= "term">
-                <option>Spring</option>
-                <option>Fall</option>
-                <option>Summer</option>
-            </select> 
-            <label>Course</label> 
-            <input class="form-control garbage-collector" type="text" id="course">
-            <label>Section</label>
-            <select class="form-control garbage-collector" id="section">
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-            </select> 
-            <label>CLO Number</label> 
-            <input class="form-control garbage-collector" type="text" id="clonumber">
+        <!-- <form id="submit_form" action="javascript:"> -->
+        <form id="submit_form" action="">
+            <label>CLO Code</label> 
+            <input class="form-control" type="text" id="clo_code">
             <label>CLO Description</label>
-            <textarea class="form-control garbage-collector" id="clodes">
+            <textarea class="form-control" id="clo_description">
             </textarea>            
 
             <br/>
 
             <button class="btn btn-primary streched" id="add">Add</button>
-            <div id="edit">
-                <button class="btn btn-primary streched">Update</button>
-                
-                <br/>
-
-                <button class="btn btn-danger streched" type="button" onclick="discard()">Delete</button>
-            </div>
+            <button class="btn btn-primary streched" id="update">Update</button>
+            <button class="btn btn-danger streched" id="delete" type="button">Delete</button>
         </form>     
         <div class="modal-footer">
         </div>

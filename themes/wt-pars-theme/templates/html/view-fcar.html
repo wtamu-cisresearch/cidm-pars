@@ -1,3 +1,4 @@
+<div id="spinner"></div>
 <div id="myModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -16,14 +17,14 @@
                         <td><b>Term</b></td>
                         <td><b>Course</b></td>
                         <td><b>Section</b></td>
-                        <td><b>Coordinator</b></td>
+                        <td><b>Instructor</b></td>
                     </tr>
                     <tr>
                         <td id="_year"></td>
                         <td id="_term"></td>
                         <td id="_course"></td>
-                        <td id="_section"></td>
-                        <td id="_coordi"></td>
+                        <td id="_number"></td>
+                        <td id="_instructor"></td>
                     </tr>
                 </tbody>
             </table>
@@ -36,7 +37,7 @@
                 </thead>
                 <tbody>
                         <tr>
-                            <td id="_coDes"></td>
+                            <td id="_course_description"></td>
                         </tr>
                 </tbody>
             </table>
@@ -115,27 +116,41 @@
                             <td><b>Modification</b></td>
                         </tr>
                         <tr>
-                            <td id="_modi"></td>
+                            <td id="_modification"></td>
                         </tr>
                         <tr>
                             <td><b>Reflection</b></td>
                         </tr>
                         <tr>
-                            <td id="_ref"></td>
+                            <td id="_reflection"></td>
                         </tr>
                         <tr>
                             <td><b>Student Feedback</b></td>
                         </tr>
                         <tr>
-                            <td id="_feed"></td>
+                            <td id="_feedback"></td>
                         </tr>
                         <tr>
                             <td><b>Proposed Actions for Course Imporvement</b></td>
                         </tr>
                         <tr>
-                            <td id="_propAct"></td>
+                            <td id="_proposed_action"></td>
                         </tr>
                     </tbody>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2">Attachments</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                                <td><b>Type</b></td>
+                                <td><b>Download</b></td>
+                        </tr>
+                        <tbody id="attachmentsHook">
+                        </tbody>
+                    </table>
                 </table>
         </div>
         <div class="modal-footer">
