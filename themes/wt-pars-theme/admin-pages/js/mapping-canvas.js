@@ -1,5 +1,10 @@
 (function($){ 
     $(document).ready(function() {
+
+        $('.box-clo').on('click', function(){
+            $(this).clone().appendTo($(this).parent().removeClass('box'));
+            //$(this).parent().remove();
+        });
         // Credit for dragging technique: Taufik Nurrohman - http://jsfiddle.net/tovic/mkUJf/
         $('#wpbody').on('mousedown', '.box', function() {
             $(this).addClass('draggable').parents().on('mousemove', function(e) {

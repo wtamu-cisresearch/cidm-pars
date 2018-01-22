@@ -59,7 +59,7 @@
     }
 
     function getData($wpdb, $x){
-        $data = $wpdb->get_results( $wpdb->prepare("SELECT * FROM pars_course_learning_outcome LIMIT $x, 10", $x));
+        $data = $wpdb->get_results( $wpdb->prepare("SELECT * FROM pars_course_learning_outcome LIMIT %d, 10", $x));
         return $data;
     }
 ?>

@@ -45,16 +45,6 @@
     cursor: pointer;
 }
 
-.box {
-    cursor:move;
-    width:70px;
-    height:70px;
-    background-color:black;
-    border:1px solid black;
-    margin:2px;
-    float:left;
-  }
-
   .content-box{
     max-height: 300px;
     min-height: 300px;
@@ -126,4 +116,21 @@
     background-color: none;
     border: none;
 }
+
+/*Mapping Canvas*/
+.box {
+    cursor:move;
+    width:150px;
+    height:60px;
+    background-color:#23282D;
+    border:1px solid #23282D;
+    margin:2px;
+    float:left;
+  }
+
+  .box-clo{
+      color: white;
+      text-align: center;
+  }
+
 
