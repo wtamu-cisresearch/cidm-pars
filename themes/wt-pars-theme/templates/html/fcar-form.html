@@ -1,202 +1,234 @@
-<div id="baseModal" class="modal">
-    <div class="modal-content">
-    <div class="modal-header">
-        <span class="close">&times;</span>
-    </div>
+<div id="child-view">
+    <table>
+        <thead>
+            <tr>
+                <th colspan="5">Current Course Selection</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <b>Course Code</b>
+                </td>
+                <td>
+                    <b>Course Name</b>
+                </td>
+                <td>
+                    <b>Section</b>
+                </td>
+                <td>
+                    <b>Year</b>
+                </td>
+                <td>
+                    <b>Term</b>
+                </td>
+            </tr>
+            <tr>
+                <td id="course-code"></td>
+                <td id="course-name"></td>
+                <td id="section-number"></td>
+                <td id="section-year"></td>
+                <td id="section-term"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br/>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Course Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="course-description"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br/>
+
+    <form action="javascript:submit();">
         <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="5">Current Course Selection</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><b>Year</b></td>
-                        <td><b>Term</b></td>
-                        <td><b>Course</b></td>
-                        <td><b>Section</b></td>
-                    </tr>
-                    <tr>
-                        <td id="_year"></td>
-                        <td id="_term"></td>
-                        <td id="_course"></td>
-                        <td id="_section"></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <br/>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Course Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        <tr>
-                            <td id="_coDes"></td>
-                        </tr>
-                </tbody>
-            </table>
-
-            <br/>
-            
-            <form action="javascript:submit();">
-                <div>
-                    <select id="_cloHook" style="width: 100%;" onchange="spanModal(value)">
-                        <option id='defaultOption' selected>- Select a Course Learning Objective -</option>
-                    </select>
-                    <div id="_widgetsHook"></div>
-                </div>
-
-                <br/>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th colspan="6">Grade Distribution</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                                <td><b>A</b></td>
-                                <td><b>B</b></td>
-                                <td><b>C</b></td>
-                                <td><b>D</b></td>
-                                <td><b>F</b></td>
-                                <td><b>X</b></td>
-                        </tr>
-                        <tr>
-                            <td><input id="a" type="text" style="width: 30px;"></td>
-                            <td><input id="b" type="text" style="width: 30px;"></td>
-                            <td><input id="c" type="text" style="width: 30px;"></td>
-                            <td><input id="d" type="text" style="width: 30px;"></td>
-                            <td><input id="f" type="text" style="width: 30px;"></td>
-                            <td><input id="x" type="text" style="width: 30px;"></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <br/>
-
-                <div>
-                    <label>Modifications Made to Course</label>
-                    <textarea id="modifications"></textarea>
-                </div>
-
-                <br/>
-
-                <div>
-                    <label>Reflection</label>
-                    <textarea id="reflection"></textarea>
-                </div>
-
-                <br/>  
-
-                <div>
-                    <label>Student Feedback</label>
-                    <textarea id="feedback"></textarea>
-                </div>
-
-                <br/>   
-
-                <div>
-                    <label>Proposed Actions for Course Imporvement</label>
-                    <textarea id="improvement"></textarea>
-                </div>
-
-                <div>
-                    <input type="file" style="width:100%;" id="file" onchange="fileUpload(value)">
-                </div>
-
-                <button>Submit</button>
-            </form>
+            <select id="clo-hook">
+                <option hidden value="default" selected>- Select a Course Learning Objective -</option>
+            </select>
+            <div id="artifact-hook"></div>
         </div>
-        <div class="modal-footer">
+
+        <br/>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="6">Grade Distribution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <b>A</b>
+                    </td>
+                    <td>
+                        <b>B</b>
+                    </td>
+                    <td>
+                        <b>C</b>
+                    </td>
+                    <td>
+                        <b>D</b>
+                    </td>
+                    <td>
+                        <b>F</b>
+                    </td>
+                    <td>
+                        <b>X</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="text" class="grade">
+                    </td>
+                    <td>
+                        <input type="text" class="grade">
+                    </td>
+                    <td>
+                        <input type="text" class="grade">
+                    </td>
+                    <td>
+                        <input type="text" class="grade">
+                    </td>
+                    <td>
+                        <input type="text" class="grade">
+                    </td>
+                    <td>
+                        <input type="text" class="grade">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br/>
+
+        <div>
+            <label>Modifications Made to Course</label>
+            <br/>
+            <textarea id="modifications"></textarea>
         </div>
-    </div>    
+
+        <br/>
+
+        <div>
+            <label>Reflection</label> 
+            <br/>
+            <textarea id="reflection"></textarea>
+        </div>
+
+        <br/>
+
+        <div>
+            <label>Student Feedback</label>
+            <br/>
+            <textarea id="feedback"></textarea>
+        </div>
+
+        <br/>
+
+        <div>
+            <label>Proposed Actions for Course Imporvement</label>
+            <br/>
+            <textarea id="improvement"></textarea>
+        </div>
+
+        <div>
+            <input type="file" style="width:100%;" id="file" onchange="fileUpload(value)">
+        </div>
+
+        <button>Submit</button>
+    </form>
 </div>
 
-<div id="childModal" class="modal">
+
+
+<div id="clo-modal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <span class="close">&times;</span>
         </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Course Learning Outcome Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        <tr>
-                            <td id="courseDes"></td>
-                        </tr>
-                </tbody>
-            </table>
+        <table class="underspace">
+            <thead>
+                <tr>
+                    <th>Course Learning Outcome Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="clo-code"></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="underspace">
+            <thead>
+                <tr>
+                    <th>Course Learning Outcome Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="clo-description"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <br/>
+
+        <form id="clo-form" action="">
+            <input hidden id="clo-id" name="clo-id">
+            <select style="width:100%;" name="measure" class="underspace">
+                <option>- Select Measure -</option>
+                <option>Exam</option>
+                <option>Rubric</option>
+                <option>Project</option>
+                <option>Presentation</option>
+                <option>Project Assignment</option>
+                <option>Homework Assignment</option>
+                <option>Quiz</option>
+                <option>Other</option>
+            </select>
 
             <br/>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Mapped Student Outcome</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        <tr>
-                            <td id="mappedSo"></td>
-                        </tr>
-                </tbody>
-            </table>
+            <textarea name="comments" placeholder="- Comments - " class="underspace"></textarea>
 
             <br/>
 
-            <form action="javascript:saveMeasure(this.measure.value, this.exemplary.value, this.good.value, this.satisfactory.value, this.poor.value, this.unsatisfactory.value, this.comments.value);">
-                <select style="width:100%;" id="measure">
-                    <option>- Select Measure -</option>
-                    <option>Exam</option>
-                    <option>Rubric</option>
-                    <option >Project</option>
-                    <option>Presentation</option>
-                    <option>Project Assignment</option>
-                    <option>Homework Assignment</option>
-                    <option>Quiz</option>
-                    <option>Other</option>
-                </select>
+            <input name="exemplary" type="text" placeholder="- Exemplary -" class="underspace">
 
-                <br/>
+            <br/>
 
-                <textarea id="comments" placeholder="- Comments - "></textarea>
+            <input name="good" type="text" placeholder="- Good -" class="underspace">
 
-                <br/>
+            <br/>
 
-                <input id="exemplary" type="text" placeholder="- Exemplary -">
+            <input name="satisfactory" type="text" placeholder="- Satisfactory -" class="underspace">
 
-                <br/>
-                
-                <input id="good" type="text" placeholder="- Good -">
+            <br/>
 
-                <br/>
-                
-                <input id="satisfactory" type="text" placeholder="- Satisfactory -">
+            <input name="poor" type="text" placeholder="- Poor -" class="underspace">
 
-                <br/>
-                
-                <input id="poor" type="text" placeholder="- Poor -">
+            <br/>
 
-                <br/>
-                
-                <input id="unsatisfactory" type="text" placeholder="- Unsatisfactory -">
+            <input name="unsatisfactory" type="text" placeholder="- Unsatisfactory -" class="underspace">
 
-                <button style="display:none;" id="delete" type="button">Delete</button>
+            <br/>
 
-                <button>Save</button>
-            </form>
+            <button style="display:none;" id="delete" type="button">Delete</button>
+
+            <button>Save</button>
+        </form>
         <div class="modal-footer">
-        </div>      
-    </div>  
+        </div>
+    </div>
 </div>
-

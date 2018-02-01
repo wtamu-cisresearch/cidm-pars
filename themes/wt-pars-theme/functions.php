@@ -11,6 +11,7 @@
     wp_enqueue_style( 'bootstrap' );
     wp_enqueue_script( 'bootstrap' );
 
+
     // For admin-pages
     wp_register_script( 'course-management', get_stylesheet_directory_uri().'/admin-pages/js/course-management.js' );
     wp_register_script( 'clo-management', get_stylesheet_directory_uri().'/admin-pages/js/clo-management.js' );

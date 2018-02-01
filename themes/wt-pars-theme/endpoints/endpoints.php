@@ -91,6 +91,11 @@
             'callback' => 'post_alphaStage',
             'permission_callback' => 'check_levelOne',
         ) );
+        register_rest_route( 'wt-pars-theme/v2', '/template/clolist/(?P<section_id>\d+)', array(
+            'methods' => 'GET',
+            'callback' => 'get_clolist',
+            'permission_callback' => 'check_levelTwo',
+        ) );
         register_rest_route( 'wt-pars-theme/v2', '/testfiles', array(
             'methods' => 'GET',
             'callback' => 'get_testfiles',
@@ -864,6 +869,33 @@
         }
 
         return true;
+    }
+
+    function get_clolist( $data ) {
+        global $wpdb;
+
+        try{
+            $result = $wpdb->get_results($wpdb->prepare(
+                "SELECT
+                    pars_course_learning_outcome.clo_id,
+                    pars_course_learning_outcome.code AS clo_code,
+                    pars_course_learning_outcome.description AS clo_description
+                FROM
+                    pars_course_learning_outcome,
+                    pars_alpha
+                WHERE
+                    pars_course_learning_outcome.clo_id = pars_alpha.clo_id AND pars_alpha.section_id = %d", $data['section_id']));
+
+            if(!empty($wpdb->last_error)){
+                throw new Exception($wpdb->last_error);
+            }
+
+        }
+        catch (Exception $e){
+            return new WP_Error('query failed', $e->getMessage(), array('status' => 500));     
+        }
+
+        return $result;
     }
 
     function get_testfiles(){
