@@ -96,9 +96,9 @@
             'callback' => 'get_clolist',
             'permission_callback' => 'check_levelTwo',
         ) );
-        register_rest_route( 'wt-pars-theme/v2', '/testfiles', array(
-            'methods' => 'GET',
-            'callback' => 'get_testfiles',
+        register_rest_route( 'wt-pars-theme/v2', '/template/fcarform/(?P<section_id>\d+)/(?P<a>\d+)/(?P<b>\d+)/(?P<c>\d+)/(?P<d>\d+)/(?P<f>\d+)/(?P<x>\d+)/(?P<modification>.+)/(?P<reflection>.+)/(?P<feedback>.+)/(?P<improvement>.+)/(?P<measure>.+)', array(
+            'methods' => 'POST',
+            'callback' => 'post_fcarform',
             'permission_callback' => 'check_levelTwo',
         ) );
     } );
@@ -877,7 +877,7 @@
         try{
             $result = $wpdb->get_results($wpdb->prepare(
                 "SELECT
-                    pars_course_learning_outcome.clo_id,
+                    pars_alpha.alpha_id,
                     pars_course_learning_outcome.code AS clo_code,
                     pars_course_learning_outcome.description AS clo_description
                 FROM
@@ -898,8 +898,96 @@
         return $result;
     }
 
-    function get_testfiles(){
-        return readfile("wp-content/themes/wt-pars-theme/attachments/testfile.pdf");
+    function post_fcarform( $data ){
+        global $wpdb;
+
+        $measure = array_map(function($x){
+            list($alpha_id, $measure, $comments, $exemplary, $good, $satisfactory, $poor, $unsatisfactory) = explode(',', $x);
+            return [
+                'alpha_id' => substr($alpha_id, strpos($alpha_id, ':') + 1), 
+                'measure' => substr($measure, strpos($measure, ':') + 1), 
+                'comments' => substr($comments, strpos($comments, ':') + 1), 
+                'exemplary' => substr($exemplary, strpos($exemplary, ':') + 1), 
+                'good' => substr($good, strpos($good, ':') + 1), 
+                'satisfactory' => substr($satisfactory, strpos($satisfactory, ':') + 1),
+                'poor' => substr($poor, strpos($poor, ':') + 1), 
+                'unsatisfactory' => substr($unsatisfactory, strpos($unsatisfactory, ':') + 1)
+            ];
+        }, explode('},', str_replace('"', '', urldecode($data['measure']))));
+
+        try{
+            $wpdb->query('START TRANSACTION;');
+
+            $wpdb->update('pars_section', 
+                        array(
+                            'a' => $data['a'],
+                            'b' => $data['b'],
+                            'c' => $data['c'],
+                            'd' => $data['d'],
+                            'f' => $data['f'],
+                            'x' => $data['x'],
+                            'modification' => $data['modification'],
+                            'reflection' => $data['reflection'],
+                            'feedback' => $data['feedback'],
+                            'proposed_action' => $data['improvement'],
+                            'enable' => 1,
+                        ),
+                        array(
+                            'section_id' => $data['section_id']
+                        ),
+                        array(
+                            '%d',
+                            '%d',
+                            '%d',
+                            '%d',
+                            '%d',
+                            '%d',
+                            '%s',
+                            '%s',
+                            '%s',
+                            '%s',
+                        ),
+                        array( '%d' )
+                    );
+
+            if(!empty($wpdb->last_error)){
+                throw new Exception($wpdb->last_error);
+            }
+
+            for($x = 0; $x < count($clo); $x++){
+                $wpdb->insert('pars_measure',
+                        array(
+                            'alpha_id' => $measure[$x]['alpha_id'],
+                            'type' => $measure[$x]['measure'],
+                            'exemplary' => $measure[$x]['exemplary'],
+                            'good' => $measure[$x]['good'],
+                            'satisfactory' => $measure[$x]['satisfactory'],
+                            'poor' => $measure[$x]['poor'],
+                            'unsatisfactory' => $measure[$x]['unsatisfactory']
+                        ),
+                        array(
+                            '%d',
+                            '%s',
+                            '%d',
+                            '%d',
+                            '%d',
+                            '%d',
+                            '%d'
+                        )
+                    );
+
+                    if(!empty($wpdb->last_error)){
+                        throw new Exception($wpdb->last_error);
+                    }
+            }
+            $wpdb->query('COMMIT;');
+        }
+        catch (Exception $e){
+            $wpdb->query('ROLLBACK;');
+            return new WP_Error('query failed', $e->getMessage(), array('status' => 500));
+        }
+
+        return true;
     }
                                 
 ?>

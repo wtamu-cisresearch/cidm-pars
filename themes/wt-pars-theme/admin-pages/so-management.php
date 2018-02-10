@@ -23,7 +23,7 @@
             $records = getData($wpdb, 0);
         }
 
-        $pages = $wpdb->get_results( "SELECT COUNT(so_id) AS number FROM pars_student_outcome");
+        $pages = $wpdb->get_row( "SELECT COUNT(so_id) AS number FROM pars_student_outcome");
 
         echo (
             "<table class='table table-striped'>
@@ -40,7 +40,7 @@
                 </table>
 
                 <ul class='pagination' name='_page'>
-                    " . paginize($pages) . "
+                    " . paginize($pages, 'so-management') . "
                 </ul>");
 
         function popTable($records){

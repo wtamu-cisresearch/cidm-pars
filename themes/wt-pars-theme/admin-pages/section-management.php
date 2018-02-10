@@ -25,13 +25,13 @@
                 $records = getData($wpdb, 0);
             }
 
-            $pages = $wpdb->get_results( "SELECT COUNT(section_id) AS number FROM pars_section WHERE enable = 0");
+            $pages = $wpdb->get_row( "SELECT COUNT(section_id) AS number FROM pars_section WHERE enable = 0");
 
             echo (
                 "<table class='table table-striped'>
                     <thead>
                         <tr>
-                            <th>Pending</th>
+                            <th class='alert alert-warning'>Pending</th>
                         </tr>
                         <tr>
                             <th>Course Code</th>
@@ -49,7 +49,7 @@
                 </table> 
 
                 <ul class='pagination' name='_page'>
-                    " . paginize($pages) . "
+                    " . paginize($pages, 'section-management') . "
                 </ul>");
 
             function popTable($records){

@@ -29,6 +29,7 @@
     wp_register_script( 'test', get_stylesheet_directory_uri().'/test.js' );
 
     add_action('after_switch_theme', 'initTheme', 10, 2);
+    add_action('admin_notices','checkUnmappedClos');
     add_action('admin_menu', 'adminPages');
 
     function initTheme($oldtheme_title, $oldtheme){
@@ -99,6 +100,16 @@
         return $result;
     }
     
+    function checkUnmappedClos() { 
+        global $wpdb;
+
+        $result = $wpdb->query("SELECT * FROM pars_alpha WHERE enable = 0 GROUP BY pars_alpha.clo_id;");
+
+        if ($result !== 0){
+            echo("<div class='update-nag'><b>PARS:</b> You have " . $result . " Unmapped Course Learning Outcomes[s].</div>");
+        }
+    }
+
     function adminPages() {
         add_menu_page('PARS', 'PARS', 'manage_options', 'pars', 'parsMain', 'dashicons-welcome-learn-more', 26);
         add_submenu_page('pars', 'Section Management', 'Section Management', 'manage_options', 'section-management', 'sectionManagement');
@@ -137,29 +148,32 @@
         include get_stylesheet_directory().'\admin-pages\section-management.php';
     }
 
-    // remember to solve the issue with pagination.
-    function paginize($pages){
+    // pagination
+    function paginize($pages, $source){
         $li = "";
 
-        if(!$_GET['_page'] || $_GET['_page'] < 10){
-            $celling = floor($pages[0]->number / 10) < 10? floor($pages[0]->number / 10) : 10;
+        if (!($pages->number <= 10)){
+            if(!$_GET['_page'] || $_GET['_page'] < 10){
+                echo "<script>console.log(" . $pages->number . ");</script>";
+                $celling = floor($pages->number / 10) < 10? floor($pages->number / 10) : 10;
 
-            for ($i = 0; $i < $celling; $i++){
-                $li = $li . "<li class='page-item " . activate($i) . " '><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=' . $i . '') . "'>" . $i . "</a></li>";
+                for ($i = 0; $i <= $celling; $i++){
+                    $li = $li . "<li class='page-item " . activate($i) . " '><a class='page-link' href='" . admin_url('/admin.php?page=' . $source . '&_page=' . $i . '') . "'>" . $i . "</a></li>";
+                }
+                if($celling != floor($pages->number / 10)){
+                    $li = $li . "<li class='page-item'><a class='page-link' href='" . admin_url('/admin.php?page=' . $source . '&_page=10') . "'>&#x2192;</a></li>";
+                }
             }
-            if($celling != floor($pages[0]->number / 10)){
-                $li = $li . "<li class='page-item'><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=10') . "'>&#x2192;</a></li>";
-            }
-        }
-        else if(floor($pages[0]->number / 10) >= $_GET['_page']){
-            $floor = floor($_GET['_page'] / 10) * 10;
-            $celling = ($floor + 9) < floor($pages[0]->number / 10)? ($floor + 9) : floor($pages[0]->number / 10);
-            $li = "<li class='page-item'><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=' . ($floor - 1) . '') . "'>&#x2190;</a></li>";
-            for ($i = $floor; $i <= $celling; $i++){
-                $li = $li . "<li class='page-item " . activate($i) . " '><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=' . $i . '') . "'>" . $i . "</a></li>";
-            }
-            if($celling != floor($pages[0]->number / 10)){
-                $li = $li . "<li class='page-item'><a class='page-link' href='" . admin_url('/admin.php?page=section-management&_page=' . ($celling + 1) . '') . "'>&#x2192;</a></li>";
+            else if(floor($pages->number / 10) >= $_GET['_page']){
+                $floor = floor($_GET['_page'] / 10) * 10;
+                $celling = ($floor + 9) < floor($pages->number / 10)? ($floor + 9) : floor($pages->number / 10);
+                $li = "<li class='page-item'><a class='page-link' href='" . admin_url('/admin.php?page=' . $source . '&_page=' . ($floor - 1) . '') . "'>&#x2190;</a></li>";
+                for ($i = $floor; $i <= $celling; $i++){
+                    $li = $li . "<li class='page-item " . activate($i) . " '><a class='page-link' href='" . admin_url('/admin.php?page=' . $source . '&_page=' . $i . '') . "'>" . $i . "</a></li>";
+                }
+                if($celling != floor($pages->number / 10)){
+                    $li = $li . "<li class='page-item'><a class='page-link' href='" . admin_url('/admin.php?page=' . $source . '&_page=' . ($celling + 1) . '') . "'>&#x2192;</a></li>";
+                }
             }
         }
         return $li;

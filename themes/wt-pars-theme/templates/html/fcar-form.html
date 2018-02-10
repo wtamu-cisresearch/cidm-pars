@@ -50,7 +50,7 @@
 
     <br/>
 
-    <form action="javascript:submit();">
+    <form id="section_form" action="">
         <div>
             <select id="clo-hook">
                 <option hidden value="default" selected>- Select a Course Learning Objective -</option>
@@ -89,22 +89,22 @@
                 </tr>
                 <tr>
                     <td>
-                        <input type="text" class="grade">
+                        <input name="a" type="text" class="grade">
                     </td>
                     <td>
-                        <input type="text" class="grade">
+                        <input name="b" type="text" class="grade">
                     </td>
                     <td>
-                        <input type="text" class="grade">
+                        <input name="c" type="text" class="grade">
                     </td>
                     <td>
-                        <input type="text" class="grade">
+                        <input name="d" type="text" class="grade">
                     </td>
                     <td>
-                        <input type="text" class="grade">
+                        <input name="f" type="text" class="grade">
                     </td>
                     <td>
-                        <input type="text" class="grade">
+                        <input name="x" type="text" class="grade">
                     </td>
                 </tr>
             </tbody>
@@ -115,7 +115,7 @@
         <div>
             <label>Modifications Made to Course</label>
             <br/>
-            <textarea id="modifications"></textarea>
+            <textarea name="modification"></textarea>
         </div>
 
         <br/>
@@ -123,7 +123,7 @@
         <div>
             <label>Reflection</label> 
             <br/>
-            <textarea id="reflection"></textarea>
+            <textarea name="reflection"></textarea>
         </div>
 
         <br/>
@@ -131,7 +131,7 @@
         <div>
             <label>Student Feedback</label>
             <br/>
-            <textarea id="feedback"></textarea>
+            <textarea name="feedback"></textarea>
         </div>
 
         <br/>
@@ -139,7 +139,7 @@
         <div>
             <label>Proposed Actions for Course Imporvement</label>
             <br/>
-            <textarea id="improvement"></textarea>
+            <textarea name="improvement"></textarea>
         </div>
 
         <div>
@@ -152,7 +152,7 @@
 
 
 
-<div id="clo-modal" class="modal">
+<div id="measure-modal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <span class="close">&times;</span>
@@ -184,8 +184,8 @@
 
         <br/>
 
-        <form id="clo-form" action="">
-            <input hidden id="clo-id" name="clo-id">
+        <form id="measure-form" action="">
+            <input hidden id="alpha-id" name="alpha-id">
             <select style="width:100%;" name="measure" class="underspace">
                 <option>- Select Measure -</option>
                 <option>Exam</option>

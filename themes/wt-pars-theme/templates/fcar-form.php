@@ -32,7 +32,7 @@
                 </thead>
                 <tbody>
                     " . popTable($wpdb) . "
-                <tbody>               
+                </tbody>               
             </table>");
 
         function popTable($wpdb){
@@ -52,8 +52,9 @@
                 WHERE
                     pars_course.course_id = pars_section.course_id AND pars_section.enable = 0 AND pars_section.instructor_id = %d;", get_current_user_id()));
 
+            $tr = "";
+
             foreach ( $records as $record ) {    
-                $tr = '';
                 $tr = $tr . "<tr>
                                 <td><a href='#' class='record' data-course_code='" . $record->course_code . "' data-course_name='" . $record->course_name . "' data-course_description='" . $record->course_description . "' data-section_id='" . $record->section_id . "' data-section_number='" . $record->section_number . "' data-section_year='" . $record->section_year . "' data-section_term='" . $record->section_term . "'>" . $record->course_code . "</a></td>
                                 <td>" . $record->course_name . "</td>

@@ -47,7 +47,7 @@
             </thead>
             <tbody>
                 " . popTable($records) . "
-            <tbody>               
+            </tbody>               
         </table>";
 
     function popList($periods){
@@ -59,7 +59,7 @@
     }
 
     function popTable($records){
-        $tr = '';
+        $tr = "";
         foreach ( $records as $record ) {
             $tr = $tr . "<tr>
                             <td><a href='#' class='record' data-section_id='" . $record->section_id . "'>" . $record->course . "</a></td>
