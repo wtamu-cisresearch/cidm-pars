@@ -8,7 +8,7 @@
             console.info(section_id);
 
             $.ajax({
-                url: settings.root + 'wt-pars-theme/v2/viewresults/' + section_id,
+                url: settings.root + 'wt-pars-theme/v2/template/viewresults/' + section_id,
                 method: 'GET',
                 beforeSend: function(xhr){
                     $("#spinner").addClass("spinner");

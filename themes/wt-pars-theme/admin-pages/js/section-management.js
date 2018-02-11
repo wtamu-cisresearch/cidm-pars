@@ -78,21 +78,20 @@
                 $("#myModal").hide();
             });
 
-            $("#section-number").on("focusout", function (){
-                var span = document.createElement("span");
-                span.className = "section-baby";
-                span.innerText = $("#section-number").val();
-                $("#section-hook").append(span);
-                $("#section-number").val("");
+            $('#section-number').on('focus', function(){
+                $('#section-box').addClass('upper-input');
             });
 
-            // $("#hook-section").on("click", function (){
-            //     var span = document.createElement("span");
-            //     span.id = "section-baby";
-            //     span.innerText = $("#section-number").val();
-            //     $("#section-hook").append(span);
-            //     $("#section-number").val("");
-            // });
+            $("#section-number").on("focusout", function (){
+                if (parseInt($("#section-number").val()) == $("#section-number").val()){
+                    var span = document.createElement("span");
+                    span.className = "section-baby";
+                    span.innerText = $("#section-number").val();
+                    $("#section-hook").append(span);
+                }
+                $("#section-number").val("");
+                $('#section-box').removeClass('upper-input');
+            });
 
             $("#add").on("click", function (event) {
                 event.preventDefault();
@@ -118,11 +117,11 @@
                     section_number.push($(".section-baby")[i].innerText);
                 }
 
-                JSON.stringify(clo_id);
-                JSON.stringify(section_number);
+                json_clo_id = JSON.stringify(clo_id);
+                json_section_number = JSON.stringify(section_number);
                 
                 $.ajax({
-                    url: settings.root + "wt-pars-theme/v2/admin/alphastage/" + course_id + "/" + instructor_id + "/" + instructor + "/" + section_number + "/" + year_selected + "/" + term + "/" + clo_id,
+                    url: settings.root + "wt-pars-theme/v2/admin/alphastage/" + course_id + "/" + instructor_id + "/" + instructor + "/" + json_section_number + "/" + year_selected + "/" + term + "/" + json_clo_id,
                     method: 'POST',
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader('X-WP-Nonce', settings.nonce)

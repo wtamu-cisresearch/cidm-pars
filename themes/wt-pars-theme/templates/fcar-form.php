@@ -35,6 +35,8 @@
                 </tbody>               
             </table>");
 
+            echo "<script>console.log(".get_current_user_id().");</script>";
+
         function popTable($wpdb){
 
             $records = $wpdb->get_results( $wpdb->prepare(
