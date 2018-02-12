@@ -98,10 +98,10 @@
                 'permission_callback' => array($this, 'permit_levelOne'),
                 'args' => array(
                     'section_number' => array(
-                        'sanitize_callback' => array($this, 'sanitize_numberArray')
+                        'sanitize_callback' => array($this, 'sanitize_numberArray'),
                     ),
                     'clo_id' => array(
-                        'sanitize_callback' => array($this, 'sanitize_numberArray')
+                        'sanitize_callback' => array($this, 'sanitize_numberArray'),
                     ),
                 ),
             ) );
@@ -159,7 +159,7 @@
         public function sanitize_numberArray($param, $request, $key){
             $number_array = json_decode(urldecode($param));
             try{
-                if (json_last_error() == 0){
+                if (json_last_error() != 0){
                     throw new Exception(json_last_error_msg());
                 }
                 else{
@@ -173,7 +173,7 @@
             catch(Exception $e){
                 return new WP_Error('invalid param', $e->getMessage(), array('status' => 400));
             }
-            return $number_array;
+            return $true;
         }
 
         public function get_viewresults( $data ) {

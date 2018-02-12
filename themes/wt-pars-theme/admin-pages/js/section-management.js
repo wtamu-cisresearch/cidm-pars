@@ -93,7 +93,7 @@
                 $('#section-box').removeClass('upper-input');
             });
 
-            $("#add").on("click", function (event) {
+            $("#submit_form").on("submit", function (event) {
                 event.preventDefault();
 
                 var course_id = $("#course-hook").find(":selected").data("course_id");
@@ -119,6 +119,9 @@
 
                 json_clo_id = JSON.stringify(clo_id);
                 json_section_number = JSON.stringify(section_number);
+
+                console.log(json_section_number);
+                console.log(json_clo_id);
                 
                 $.ajax({
                     url: settings.root + "wt-pars-theme/v2/admin/alphastage/" + course_id + "/" + instructor_id + "/" + instructor + "/" + json_section_number + "/" + year_selected + "/" + term + "/" + json_clo_id,
@@ -129,8 +132,8 @@
                     success: function (data) {
                         console.log(data);
                     },
-                    complete: function () {
-
+                    complete: function (xhr) {
+                        
                     },
                     error: function (xhr, status, error) {
                         console.info(xhr.responseText);
